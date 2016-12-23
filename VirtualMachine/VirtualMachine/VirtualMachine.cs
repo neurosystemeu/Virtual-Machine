@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using NeuroSystem.VirtualMachine.Core.Components;
 using NeuroSystem.VirtualMachine.Instrukcje;
 using NeuroSystem.VirtualMachine.Klasy;
 using Polenter.Serialization;
@@ -17,7 +18,7 @@ namespace NeuroSystem.VirtualMachine
     {
         public VirtualMachine()
         {
-            Stos = new Stos();
+            Stos = new Stack();
             WirtualnaMaszynaDebug = this; // do debugowania        
         }
 
@@ -56,7 +57,7 @@ namespace NeuroSystem.VirtualMachine
             CzyWykonywacInstrukcje = true;
 
             Stos.Push(instancja);
-            m.Instrukcje = new List<InstrukcjaBazowa>() { new CallStart(m) };
+            m.Instrukcje = new List<InstructionBase>() { new CallStart(m) };
 
             if (czyWykonywac)
             {
@@ -139,7 +140,7 @@ namespace NeuroSystem.VirtualMachine
 
         }
 
-        public InstrukcjaBazowa PobierzAktualnaInstrukcje()
+        public InstructionBase PobierzAktualnaInstrukcje()
         {
             var ai = AktualnaMetoda.Instrukcje[AktualnaMetoda.NumerWykonywanejInstrukcji];
             ai.WirtualnaMaszyna = this;
@@ -165,7 +166,7 @@ namespace NeuroSystem.VirtualMachine
 
 
         public object Instance { get; set; }
-        public Stos Stos { get; set; }
+        public Stack Stos { get; set; }
         public WykonywanaMetoda AktualnaMetoda { get; set; }
         public EnumStatusWirtualnejMaszyny Status { get; set; }
         public string RzuconyWyjatekCalosc { get; set; }
@@ -173,7 +174,7 @@ namespace NeuroSystem.VirtualMachine
         public bool CzyWykonywacInstrukcje { get; set; }
         public object Wynik { get; internal set; }
         public long NumerIteracji { get; set; }
-        private InstrukcjaBazowa aktualnaInstrukcja;
+        private InstructionBase aktualnaInstrukcja;
 
         internal string DebugInfo
         {

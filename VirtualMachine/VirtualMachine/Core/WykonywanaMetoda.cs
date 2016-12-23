@@ -15,8 +15,8 @@ namespace NeuroSystem.VirtualMachine
     {
         public WykonywanaMetoda()
         {
-            LokalneArgumenty = new DaneMetody();
-            LokalneZmienne = new DaneMetody();
+            LokalneArgumenty = new MethodData();
+            LokalneZmienne = new MethodData();
             instrukcje = null;
         }
 
@@ -30,11 +30,11 @@ namespace NeuroSystem.VirtualMachine
         }
 
         public int NumerWykonywanejInstrukcji { get; set; }
-        public DaneMetody LokalneArgumenty { get; set; }
-        public DaneMetody LokalneZmienne { get; set; }
+        public MethodData LokalneArgumenty { get; set; }
+        public MethodData LokalneZmienne { get; set; }
 
-        private List<InstrukcjaBazowa> instrukcje;
-        internal List<InstrukcjaBazowa> Instrukcje
+        private List<InstructionBase> instrukcje;
+        internal List<InstructionBase> Instrukcje
         {
             get
             {
@@ -59,11 +59,11 @@ namespace NeuroSystem.VirtualMachine
         }               
         
 
-        public List<InstrukcjaBazowa> PobierzInstrukcje()
+        public List<InstructionBase> PobierzInstrukcje()
         {
             var metoda = PobierzOpisMetody();
             var il = metoda.Body.GetILProcessor();
-            var instrukcje = il.Body.Instructions.Select(i => InstrukcjaBazowa.UtworzInstrukcje(i));
+            var instrukcje = il.Body.Instructions.Select(i => InstructionBase.UtworzInstrukcje(i));
             return instrukcje.ToList();
         }
 
