@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{31E3551D-66C6-44D9-9950-E3DAECA00DCA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NeuroSystem.VirtualMachine</RootNamespace>
+    <AssemblyName>NeuroSystem.VirtualMachine</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dynamitey, Version=1.0.2.0, Culture=neutral, PublicKeyToken=cbf53ea3aeb972c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dynamitey.1.0.2.0\lib\net40\Dynamitey.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net45\Mono.Cecil.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net45\Mono.Cecil.Mdb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net45\Mono.Cecil.Pdb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Cecil.Rocks, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Cecil.0.9.6.4\lib\net45\Mono.Cecil.Rocks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Polenter.SharpSerializer, Version=2.20.0.0, Culture=neutral, PublicKeyToken=8f4f20011571ee5f, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpSerializer.2.20\lib\net20\Polenter.SharpSerializer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Adres.cs" />
+    <Compile Include="Core\AdresArgumentu.cs" />
+    <Compile Include="Core\AdresZmiennej.cs" />
+    <Compile Include="Core\AdresZmiennejLokalnej.cs" />
+    <Compile Include="Core\DaneMetody.cs" />
+    <Compile Include="Core\EnumStatusWirtualnejMaszyny.cs" />
+    <Compile Include="Core\InterpertujAttribute.cs" />
+    <Compile Include="Core\MonoTypeExtension.cs" />
+    <Compile Include="Core\Stos.cs" />
+    <Compile Include="Core\WykonywanaMetoda.cs" />
+    <Compile Include="Instructions\Add.cs" />
+    <Compile Include="Instructions\Br.cs" />
+    <Compile Include="Instructions\Brfalse.cs" />
+    <Compile Include="Instructions\Brtrue.cs" />
+    <Compile Include="Instructions\Br_S.cs" />
+    <Compile Include="Instructions\Call.cs" />
+    <Compile Include="Instructions\CallStart.cs" />
+    <Compile Include="Instructions\Callvirt.cs" />
+    <Compile Include="Instructions\Castclass.cs" />
+    <Compile Include="Instructions\Ceq.cs" />
+    <Compile Include="Instructions\Cgt.cs" />
+    <Compile Include="Instructions\Cgt_Un.cs" />
+    <Compile Include="Instructions\Clt.cs" />
+    <Compile Include="Instructions\Constrained.cs" />
+    <Compile Include="Instructions\Conv_R8.cs" />
+    <Compile Include="Instructions\Dup.cs" />
+    <Compile Include="Instructions\Endfinally.cs" />
+    <Compile Include="Instructions\Initobj.cs" />
+    <Compile Include="Instructions\InstrukcjaBazowa.cs" />
+    <Compile Include="Instructions\Isinst.cs" />
+    <Compile Include="Instructions\Ldarg.cs" />
+    <Compile Include="Instructions\Ldarga.cs" />
+    <Compile Include="Instructions\Ldc.cs" />
+    <Compile Include="Instructions\Ldfld.cs" />
+    <Compile Include="Instructions\Ldloc.cs" />
+    <Compile Include="Instructions\Ldloca.cs" />
+    <Compile Include="Instructions\Ldstr.cs" />
+    <Compile Include="Instructions\ldtoken.cs" />
+    <Compile Include="Instructions\Leave_S.cs" />
+    <Compile Include="Instructions\Newarr.cs" />
+    <Compile Include="Instructions\Newobj.cs" />
+    <Compile Include="Instructions\Nop.cs" />
+    <Compile Include="Instructions\Pop.cs" />
+    <Compile Include="Instructions\Ret.cs" />
+    <Compile Include="Instructions\Starg.cs" />
+    <Compile Include="Instructions\Stelem_Ref.cs" />
+    <Compile Include="Instructions\Stfld.cs" />
+    <Compile Include="Instructions\Stloc.cs" />
+    <Compile Include="Instructions\Sub.cs" />
+    <Compile Include="Instructions\Throw.cs" />
+    <Compile Include="Instructions\Unbox_Any.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VirtualMachine.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
