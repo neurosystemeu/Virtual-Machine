@@ -53,7 +53,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 //interpretujemy
                 var staraMetoda = WirtualnaMaszyna.AktualnaMetoda;
 
-                var m = new WykonywanaMetoda();
+                var m = new Metoda();
                 m.NazwaTypu = md.DeclaringType.FullName;
                 m.NazwaMetody = md.Name;
                 m.AssemblyName = md.DeclaringType.Module.FullyQualifiedName;
@@ -65,7 +65,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 WczytajLokalneArgumenty(iloscArgumentow);
 
                 //zapisuję aktualną metodę na stosie
-                Push(staraMetoda);
+                PushObject(staraMetoda);
                 WykonajNastepnaInstrukcje();
             }            
         }
@@ -82,7 +82,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 //wykonuje gettera - 
 
                 //jeśli instancja jest adresem do obiektu
-                var adres = instancja as VariableAddressBase;
+                var adres = instancja as ObjectAddressWraper;
                 if (adres != null)
                 {
                     instancja = adres.GetValue();
@@ -93,7 +93,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 var arg = new List<object>();
                 for (int i = 0; i < iloscArgumentow2; i++)
                 {
-                    var o = Pop();
+                    var o = PopObject();
                     arg.Add(o);
                 }
 
@@ -103,7 +103,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 if (md.HasThis)
                 {
                     //Wykonujemy gettera
-                    instancja = Pop();
+                    instancja = PopObject();
                 }
                 typ = md.DeclaringType.GetSystemType();
                
@@ -128,7 +128,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
                 if (wynik == null)
                 {
-                    Push(wynik);
+                    PushObject(wynik);
                 } else
                 {
                     //sprawdzam czy zwracany tym jest Nullable<typ>
@@ -140,16 +140,16 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                         {
                             var typNullable = typeof(Nullable<>).MakeGenericType(typWyniku);
                             var wynikNullable = Activator.CreateInstance(typNullable, wynik);
-                            Push(wynikNullable);
+                            PushObject(wynikNullable);
                         }
                         else
                         {
-                            Push(wynik);
+                            PushObject(wynik);
                         }
                     } else
                     {
                         //zwykły typ, więc go zwracam - takim jakim jest
-                        Push(wynik);
+                        PushObject(wynik);
                     }
                 }
 
@@ -159,8 +159,8 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             else if (md != null && md.IsSetter)
             {
                 //wykonujemy settera
-                var dane = Pop();
-                instancja = Pop();
+                var dane = PopObject();
+                instancja = PopObject();
                 var typ = instancja.GetType();
                 
                 var m2 = typ.GetProperty(md.Name.Replace("set_", ""));
@@ -175,13 +175,13 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 var arg = new List<object>();
                 for (int i = 0; i < iloscArgumentow2; i++)
                 {
-                    var o = Pop();
+                    var o = PopObject();
                     arg.Add(o);
                 }
                 if (md.HasThis)
                 {
                     //metoda ma this (metoda obiektu)
-                    instancja = Pop();
+                    instancja = PopObject();
                     arg.Reverse();
                     var argumenty = arg.ToArray();
                     var zmienioneArgumenty = new List<object>();
@@ -291,11 +291,11 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                                         MethodInfo method = typ.GetMethod(mr.Name);
                                         MethodInfo generic = method.MakeGenericMethod(typParametruGenerycznego);
                                         var wynik = generic.Invoke(instancja, argumenty);
-                                        Push(wynik);
+                                        PushObject(wynik);
                                     } else if (mr.ReturnType.FullName != typeof(void).FullName)
                                     {
                                         var wynik = methodInfo.Invoke(instancja, argumenty);
-                                        Push(wynik);                                        
+                                        PushObject(wynik);                                        
                                     } else
                                     {
                                         methodInfo.Invoke(instancja, argumenty);
@@ -323,7 +323,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                         MethodInfo method = typ.GetMethod(mr.Name);
                         MethodInfo generic = method.MakeGenericMethod(typParametruGenerycznego);
                         var wynik = generic.Invoke(instancja, argumenty);
-                        Push(wynik);
+                        PushObject(wynik);
                     }
                     else
                     {
@@ -331,7 +331,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                         {
                             var wynikDyn = Dynamic.InvokeMember(instancja, mr.Name, argumenty);
                             var wynik = (object)wynikDyn;
-                            Push(wynik);
+                            PushObject(wynik);
                         }
                         else if (mr.ReturnType.FullName != typeof(void).FullName && mr.HasGenericParameters == true)
                         {
@@ -343,7 +343,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                             MethodInfo method = typ.GetMethod(mr.Name);
                             MethodInfo generic = method.MakeGenericMethod(typParametruGenerycznego);
                             var wynik = generic.Invoke(instancja, argumenty);
-                            Push(wynik);
+                            PushObject(wynik);
                         }
                         else
                         {
@@ -357,7 +357,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                     dynamic b = arg[1];
 
                     dynamic wynik = a == b;
-                    Push(wynik);
+                    PushObject(wynik);
                     WykonajNastepnaInstrukcje();
                 } else
                 {
@@ -370,7 +370,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                     var wynik = (object) wynikDyn;
                     if (mr.ReturnType.FullName != typeof(void).FullName)
                     {
-                        Push(wynik);
+                        PushObject(wynik);
                     }
                     WykonajNastepnaInstrukcje();
                 }

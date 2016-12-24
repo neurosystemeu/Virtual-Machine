@@ -18,7 +18,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
         public override void Wykonaj()
         {
             WirtualnaMaszyna.Status = EnumStatusWirtualnejMaszyny.RzuconyWyjatek;
-            var rzuconyWyjatek = Pop();
+            var rzuconyWyjatek = PopObject();
             ObslugaRzuconegoWyjatku(WirtualnaMaszyna, rzuconyWyjatek);
         }
 
@@ -39,7 +39,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                         wirtualnaMaszyna.AktualnaMetoda.NumerWykonywanejInstrukcji
                             = aktywnaMetod.PobierzNumerInstrukcjiZOffsetem(blok.HandlerStart.Offset);
 
-                        wirtualnaMaszyna.Stos.Push(rzuconyWyjatek); 
+                        wirtualnaMaszyna.Stos.PushObject(rzuconyWyjatek); 
                         if (blok.HandlerType == ExceptionHandlerType.Catch)
                         {
                             //wracam do zwykłej obsługi kodu                            

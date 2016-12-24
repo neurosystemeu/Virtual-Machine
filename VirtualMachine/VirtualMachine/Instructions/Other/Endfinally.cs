@@ -16,7 +16,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override void Wykonaj()
         {
-            var rzuconyWyjatek = Pop();
+            var rzuconyWyjatek = PopObject();
             if (WirtualnaMaszyna.Status == EnumStatusWirtualnejMaszyny.RzuconyWyjatek)
             {
                 //jestem w trakcie wyjątku, przechodzę przez stos do obsługi wyjątku

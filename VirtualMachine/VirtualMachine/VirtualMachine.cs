@@ -22,6 +22,53 @@ namespace NeuroSystem.VirtualMachine
             WirtualnaMaszynaDebug = this; // do debugowania        
         }
 
+
+        #region start
+        public object Start(object instancja, string nazwaMetodyStartu = "Start", bool czyWykonywac = true)
+        {
+            NumerIteracji = 0;
+            Instance = instancja;
+            var typ = Instance.GetType();
+            var foldre = typ.Assembly.Location;
+            var module = Mono.Cecil.ModuleDefinition.ReadModule(foldre);
+            var typy = module.GetTypes();
+            var typDef = typy.First(t => t.FullName == typ.FullName);
+            var metoda = typDef.Methods.FirstOrDefault(mm => mm.Name == nazwaMetodyStartu);
+
+
+            var m = new Metoda(metoda);
+
+            AktualnaMetoda = m;
+            CzyWykonywacInstrukcje = true;
+
+            Stos.PushObject(instancja);
+            m.Instrukcje = new List<InstructionBase>() { new CallStart(m) };
+
+            if (czyWykonywac)
+            {
+                Wykonuj();
+                return Wynik;
+            }
+            else
+            {
+                //pierwsza instrukcja to CallStart(m) - która nie serializuje się, musi być teraz wykonana - dla ustawienia 
+                //odpowiedniego stosu i stanu wirutalnej maszyny
+                aktualnaInstrukcja = PobierzAktualnaInstrukcje();
+                aktualnaInstrukcja.Wykonaj();
+                NumerIteracji++;
+                return null;
+            }
+        }
+        #endregion
+
+
+
+
+
+
+
+
+
         public TD Start<T, TD>(T instancja, Expression<Func<T, TD>> startMethod, bool czyWykonywac = true)
         {
             WalidujMetodyObiektu(instancja);
@@ -39,39 +86,7 @@ namespace NeuroSystem.VirtualMachine
             return (TD)Wynik;
         }
 
-        public void Start(object instancja, string nazwaMetodyStartu, bool czyWykonywac = true)
-        {
-            NumerIteracji = 0;
-            Instance = instancja;
-            var typ = Instance.GetType();
-            var foldre = typ.Assembly.Location;
-            var module = Mono.Cecil.ModuleDefinition.ReadModule(foldre);
-            var typy = module.GetTypes();
-            var typDef = typy.First(t => t.FullName == typ.FullName);
-            var metoda = typDef.Methods.FirstOrDefault(mm => mm.Name == nazwaMetodyStartu);
 
-
-            var m = new WykonywanaMetoda(metoda);
-
-            AktualnaMetoda = m;
-            CzyWykonywacInstrukcje = true;
-
-            Stos.Push(instancja);
-            m.Instrukcje = new List<InstructionBase>() { new CallStart(m) };
-
-            if (czyWykonywac)
-            {
-                Wykonuj();
-            }
-            else
-            {
-                //pierwsza instrukcja to CallStart(m) - która nie serializuje się, musi być teraz wykonana - dla ustawienia 
-                //odpowiedniego stosu i stanu wirutalnej maszyny
-                aktualnaInstrukcja = PobierzAktualnaInstrukcje();
-                aktualnaInstrukcja.Wykonaj();
-                NumerIteracji++;
-            }
-        }
 
         public static VirtualMachine WirtualnaMaszynaDebug;
 
@@ -158,8 +173,8 @@ namespace NeuroSystem.VirtualMachine
             var metody = typDef.Methods;
             foreach (var metoda in metody)
             {
-                var m = new WykonywanaMetoda(metoda);
-                var i = m.PobierzInstrukcje(); //pobierma instrukcje metody - jeśli brakuje jakiejś instrukcji rzuca wyjątek
+                var m = new Metoda(metoda);
+                var i = m.PobierzInstrukcjeMetody(); //pobierma instrukcje metody - jeśli brakuje jakiejś instrukcji rzuca wyjątek
             }
         }
 
@@ -167,7 +182,7 @@ namespace NeuroSystem.VirtualMachine
 
         public object Instance { get; set; }
         public Stack Stos { get; set; }
-        public WykonywanaMetoda AktualnaMetoda { get; set; }
+        public Metoda AktualnaMetoda { get; set; }
         public EnumStatusWirtualnejMaszyny Status { get; set; }
         public string RzuconyWyjatekCalosc { get; set; }
         public string RzuconyWyjatekWiadomosc { get; set; }

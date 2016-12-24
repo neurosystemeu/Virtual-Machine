@@ -7,7 +7,7 @@ using NeuroSystem.VirtualMachine.Klasy;
 
 namespace NeuroSystem.VirtualMachine.Instrukcje.Klasy
 {
-    public class ArgumentAddress : VariableAddressBase
+    public class ArgumentAddress : ObjectAddressWraper
     {
         public int Indeks { get; internal set; }
         public MethodData LokalneArgumenty { get; internal set; }

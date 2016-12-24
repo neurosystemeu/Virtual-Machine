@@ -15,27 +15,27 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override void Wykonaj()
         {
-            dynamic b = Pop();
-            dynamic a = Pop();
+            dynamic b = PopObject();
+            dynamic a = PopObject();
 
             if(b is int || a is int)
             {
                 dynamic wynik = a > b ? 1 : 0;
-                Push(wynik);
+                PushObject(wynik);
             } else if (b is double || a is double)
             {
                 dynamic wynik = a > b ? 1 : 0;
-                Push(wynik);
+                PushObject(wynik);
             }
             else if (b is float || a is float)
             {
                 dynamic wynik = a > b ? 1 : 0;
-                Push(wynik);
+                PushObject(wynik);
             } else
             {
                 //mamy jakiś obiekt więc sprawdzamy czy jest różny
                 dynamic wynik = a != b ? 1 : 0;
-                Push(wynik);
+                PushObject(wynik);
             }
 
 

@@ -17,7 +17,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
         public override void Wykonaj()
         {
             var wynik = false;
-            dynamic a = Pop();
+            dynamic a = PopObject();
             if (a == null)
             {
                 wynik = false;

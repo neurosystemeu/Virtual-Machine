@@ -23,7 +23,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             var vd = vr.Resolve();
 
             var o = PobierzAdresZmiennejLokalnej(vr.Index);
-            Push(o);
+            PushObject(o);
             WykonajNastepnaInstrukcje();
         }
 

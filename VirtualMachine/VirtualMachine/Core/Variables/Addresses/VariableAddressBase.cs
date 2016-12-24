@@ -7,7 +7,7 @@ using NeuroSystem.VirtualMachine.Core.Variables;
 
 namespace NeuroSystem.VirtualMachine.Instrukcje.Klasy
 {
-    public class VariableAddressBase : VariableBase
+    public class ObjectAddressWraper : ObjectWraperBase
     {
         
     }

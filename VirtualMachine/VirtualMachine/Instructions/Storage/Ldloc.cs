@@ -22,7 +22,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
         public override void Wykonaj()
         {
             var o = PobierzLokalnaZmienna(Indeks);
-            Push(o);
+            PushObject(o);
             WykonajNastepnaInstrukcje();
         }
 

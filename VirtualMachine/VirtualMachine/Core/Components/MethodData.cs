@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 namespace NeuroSystem.VirtualMachine.Klasy
 {
     /// <summary>
-    /// Dane metody
+    /// Dane metody albo parametry metody albo argumenty
     /// </summary>
     public class MethodData
     {
         public MethodData()
         {
             Obiekty = new Dictionary<int, object>();
-            //Obiekty = new object[4];
         }
 
         public void Ustaw(int index, object obiekt)

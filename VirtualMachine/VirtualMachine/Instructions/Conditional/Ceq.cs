@@ -17,8 +17,8 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override void Wykonaj()
         {
-            dynamic b = Pop();
-            dynamic a = Pop();
+            dynamic b = PopObject();
+            dynamic a = PopObject();
             if (a is int && b is bool)
             {
                 b = b ? 1 : 0;
@@ -29,7 +29,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             }
 
             dynamic wynik = a == b;
-            Push(wynik);
+            PushObject(wynik);
             WykonajNastepnaInstrukcje();
         }
     }

@@ -24,12 +24,12 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             var listaParametrow = new List<Object>();
             for (int i = 0; i < iloscParametrow; i++)
             {
-                listaParametrow.Add(Pop());
+                listaParametrow.Add(PopObject());
             }
 
             //md.Module.ExportedTypes.FirstOrDefault(t=>t.)
             var nowyObiekt = Activator.CreateInstance(typ,listaParametrow.ToArray());
-            Push(nowyObiekt);
+            PushObject(nowyObiekt);
             WykonajNastepnaInstrukcje();
         }
     }

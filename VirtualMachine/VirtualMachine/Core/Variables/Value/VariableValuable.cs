@@ -6,7 +6,18 @@ using System.Threading.Tasks;
 
 namespace NeuroSystem.VirtualMachine.Core.Variables.Value
 {
-    public class VariableValuable
+    public class ObjectWraper : ObjectWraperBase
     {
+        public object Warosc;
+
+        public ObjectWraper(object o)
+        {
+            Warosc = o;
+        }
+
+        public override object GetValue()
+        {
+            return Warosc;
+        }
     }
 }

@@ -18,9 +18,9 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override void Wykonaj()
         {
-            var o = Pop();
-            Push(o);
-            Push(o);
+            var o = PopObject();
+            PushObject(o);
+            PushObject(o);
 
             WykonajNastepnaInstrukcje();
         }

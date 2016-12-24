@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NeuroSystem.VirtualMachine.Core.Variables.Value;
 
 namespace NeuroSystem.VirtualMachine.Core.Components
 {
@@ -10,20 +11,20 @@ namespace NeuroSystem.VirtualMachine.Core.Components
     {
         public Stack()
         {
-            stosWewnetrzny = new Stack<object>();
+            stosWewnetrzny = new Stack<ElementBase>();
         }
 
-        public Stack<object> PobierzStos()
+        public Stack<ElementBase> PobierzStos()
         {
             return stosWewnetrzny;
         }
 
-        private Stack<object> stosWewnetrzny;
+        private Stack<ElementBase> stosWewnetrzny;
 
         /// <summary>
         /// Używany tylko do serializacji stosu (zapisuje go jako lista)
         /// </summary>
-        public List<object> StosSerializowany
+        public List<ElementBase> StosSerializowany
         {
             get
             {
@@ -40,7 +41,13 @@ namespace NeuroSystem.VirtualMachine.Core.Components
             }
         }
 
-        public void Push(object obiekt)
+        public void PushObject(object obiekt)
+        {
+            var w = new ObjectWraper(obiekt);
+            Push(w);
+        }
+
+        public void Push(ElementBase obiekt)
         {
             stosWewnetrzny.Push(obiekt);
         }
@@ -74,14 +81,14 @@ namespace NeuroSystem.VirtualMachine.Core.Components
             return str;
         }
 
-        public WykonywanaMetoda PobierzNastepnaMetodeZeStosu()
+        public Metoda PobierzNastepnaMetodeZeStosu()
         {
             while(stosWewnetrzny.Count > 0)
             {
                 var o = stosWewnetrzny.Pop();
-                if(o is WykonywanaMetoda)
+                if(o is Metoda)
                 {
-                    return o as WykonywanaMetoda;
+                    return o as Metoda;
                 }
             }
 

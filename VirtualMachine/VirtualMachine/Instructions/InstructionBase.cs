@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Mono.Cecil.Cil;
 using NeuroSystem.VirtualMachine;
+using NeuroSystem.VirtualMachine.Core;
+using NeuroSystem.VirtualMachine.Core.Variables;
+using NeuroSystem.VirtualMachine.Core.Variables.Value;
 using NeuroSystem.VirtualMachine.Instrukcje;
 using NeuroSystem.VirtualMachine.Instrukcje.Klasy;
 
@@ -39,34 +42,34 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 var o = WirtualnaMaszyna.Stos.Pop();
                 lista[i] = o;
             }
-            WirtualnaMaszyna.AktualnaMetoda.LokalneArgumenty.Wczytaj(lista);
+            WirtualnaMaszyna.AktualnaMetoda.LocalArguments.Wczytaj(lista);
         }
 
         public void ZapiszLokalnyArgument(object o, int indeks)
         {
-            WirtualnaMaszyna.AktualnaMetoda.LokalneArgumenty.Ustaw(indeks, o);
+            WirtualnaMaszyna.AktualnaMetoda.LocalArguments.Ustaw(indeks, o);
         }
 
         public object PobierzLokalnyArgument(int indeks)
         {
-            return WirtualnaMaszyna.AktualnaMetoda.LokalneArgumenty.Pobierz(indeks);
+            return WirtualnaMaszyna.AktualnaMetoda.LocalArguments.Pobierz(indeks);
         }
 
         public void ZapiszLokalnaZmienna(object o, int indeks)
         {
-            WirtualnaMaszyna.AktualnaMetoda.LokalneZmienne.Ustaw(indeks, o);
+            WirtualnaMaszyna.AktualnaMetoda.LocalVariables.Ustaw(indeks, o);
         }
 
         public object PobierzLokalnaZmienna(int indeks)
         {
-            return WirtualnaMaszyna.AktualnaMetoda.LokalneZmienne.Pobierz(indeks);
+            return WirtualnaMaszyna.AktualnaMetoda.LocalVariables.Pobierz(indeks);
         }
 
         public LocalVariableAddress PobierzAdresZmiennejLokalnej(int indeks)
         {
             var adres = new LocalVariableAddress();
             adres.Indeks = indeks;
-            adres.LokalneZmienne = WirtualnaMaszyna.AktualnaMetoda.LokalneZmienne;
+            adres.LokalneZmienne = WirtualnaMaszyna.AktualnaMetoda.LocalVariables;
 
             return adres;
         }
@@ -75,7 +78,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
         {
             var adres = new ArgumentAddress();
             adres.Indeks = indeks;
-            adres.LokalneArgumenty = WirtualnaMaszyna.AktualnaMetoda.LokalneArgumenty;
+            adres.LokalneArgumenty = WirtualnaMaszyna.AktualnaMetoda.LocalArguments;
 
             return adres;
         }
@@ -95,9 +98,9 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             am.NumerWykonywanejInstrukcji = am.Instrukcje.IndexOf(ins);
         }
 
-        public void Push(object o)
+        public void PushObject(object o)
         {
-            WirtualnaMaszyna.Stos.Push(o);
+            WirtualnaMaszyna.Stos.PushObject(o);
         }
 
         /// <summary>
@@ -105,19 +108,19 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
         /// jeśli jest adres na stosie to zamienia na obiekt
         /// </summary>
         /// <returns></returns>
-        public object Pop()
+        public object PopObject()
         {
             var ob =  WirtualnaMaszyna.Stos.Pop();
-            if(ob is VariableAddressBase)
+            if(ob is ObjectWraperBase)
             {
-                var adres = ob as VariableAddressBase;
-                return adres.GetValue();
+                var v = ob as ObjectWraperBase;
+                return v.GetValue();
             }
 
             return ob;
         }
 
-        public object PopRaw()
+        public object Pop()
         {
             var ob = WirtualnaMaszyna.Stos.Pop();
 
@@ -261,7 +264,11 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                     return new Br(instrukcja);
                 case Code.Initobj:
                     return new Initobj(instrukcja);
-                
+                    case Code.Box:
+                    return new Box(instrukcja);
+                    case Code.Unbox:
+                    return new Unbox(instrukcja);
+
 
             }
 

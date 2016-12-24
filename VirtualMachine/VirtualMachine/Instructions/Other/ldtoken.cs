@@ -25,7 +25,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             {
                 var typ = td.GetSystemType();
                 var h = typ.TypeHandle;
-                Push(h);
+                PushObject(h);
                 WykonajNastepnaInstrukcje();
             }
             var md = instrukcja.Operand as Mono.Cecil.MethodDefinition;
@@ -36,7 +36,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 var metoda = typ.GetMethod(md.Name);
                 var h = metoda.MethodHandle;
                 
-                Push(h);
+                PushObject(h);
                 WykonajNastepnaInstrukcje();
             }
         }

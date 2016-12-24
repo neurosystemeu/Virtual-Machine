@@ -6,21 +6,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NeuroSystem.VirtualMachine.Core;
 
 namespace NeuroSystem.VirtualMachine
 {
     
-
-    public class WykonywanaMetoda
+    /// <summary>
+    /// Metoda która będzie wykonywana
+    /// </summary>
+    public class Metoda : ElementBase
     {
-        public WykonywanaMetoda()
+        public Metoda()
         {
-            LokalneArgumenty = new MethodData();
-            LokalneZmienne = new MethodData();
+            LocalArguments = new MethodData();
+            LocalVariables = new MethodData();
             instrukcje = null;
         }
 
-        public WykonywanaMetoda(MethodDefinition metoda) : this()
+        public Metoda(MethodDefinition metoda) : this()
         {
             var m = this;
             m.AssemblyName = metoda.Module.FullyQualifiedName;
@@ -29,43 +32,60 @@ namespace NeuroSystem.VirtualMachine
             m.NumerWykonywanejInstrukcji = 0;
         }
 
+        #region Propercje
+
+        public string NazwaTypu { get; set; }
+        public string NazwaMetody { get; set; }
+        public string AssemblyName { get; internal set; }
+        public int OffsetWykonywanejInstrukcji { get; internal set; }
+
+
         public int NumerWykonywanejInstrukcji { get; set; }
-        public MethodData LokalneArgumenty { get; set; }
-        public MethodData LokalneZmienne { get; set; }
+        public MethodData LocalArguments { get; set; }
+        public MethodData LocalVariables { get; set; }
 
         private List<InstructionBase> instrukcje;
         internal List<InstructionBase> Instrukcje
         {
             get
             {
-                if(instrukcje == null)
+                if (instrukcje == null)
                 {
-                    instrukcje = PobierzInstrukcje();
+                    instrukcje = PobierzInstrukcjeMetody();
                 }
                 return instrukcje;
             }
             set { instrukcje = value; }
         }
 
-        public string NazwaTypu { get; set; }        
-        public string NazwaMetody { get; set; }
-        public string AssemblyName { get; internal set; }
-        //public string AssemblyLocation { get; internal set; }
-        public int OffsetWykonywanejInstrukcji { get; internal set; }
+        #endregion
+
+
+
+        #region Instrukcje
 
         public void WyczyscInstrukcje()
         {
             instrukcje = null;
-        }               
-        
+        }
 
-        public List<InstructionBase> PobierzInstrukcje()
+        public List<InstructionBase> PobierzInstrukcjeMetody()
         {
             var metoda = PobierzOpisMetody();
             var il = metoda.Body.GetILProcessor();
             var instrukcje = il.Body.Instructions.Select(i => InstructionBase.UtworzInstrukcje(i));
             return instrukcje.ToList();
         }
+
+        #endregion
+
+
+
+
+
+
+
+
 
         public int PobierzNumerInstrukcjiZOffsetem(int offset)
         {

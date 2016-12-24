@@ -18,9 +18,9 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override void Wykonaj()
         {
-            var val = Pop();
-            var indeks = (int) Pop();
-            var array = Pop() as Array;
+            var val = PopObject();
+            var indeks = (int) PopObject();
+            var array = PopObject() as Array;
 
             array.SetValue(val,indeks);
 

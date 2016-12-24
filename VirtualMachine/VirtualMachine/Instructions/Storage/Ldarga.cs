@@ -23,7 +23,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
         public override void Wykonaj()
         {
             var o = PobierzAdresArgumentu(index);
-            Push(o);
+            PushObject(o);
             WykonajNastepnaInstrukcje();
         }
 

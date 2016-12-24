@@ -15,15 +15,15 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override void Wykonaj()
         {
-            var ob = PopRaw();
+            var ob = Pop();
 
             if(ob == null)
             {
                 //nic nie robimy
-            } else if( ob is VariableAddressBase)
+            } else if( ob is ObjectAddressWraper)
             {
                 //mamy adres do zmiennej
-                var adres = ob as VariableAddressBase;
+                var adres = ob as ObjectAddressWraper;
                 var zmienna = adres.GetValue();
 
                 if(zmienna != null)

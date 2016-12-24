@@ -70,13 +70,27 @@
   <ItemGroup>
     <Compile Include="Generyki\MonoCecilTest\UnitTest1.cs" />
     <Compile Include="Klasy\Biznesowe\ObiektBiznesowy.cs" />
+    <Compile Include="Klasy\Procesy\Proces.cs" />
     <Compile Include="Klasy\Repozytoria\Repozytorium.cs" />
     <Compile Include="Klasy\Biznesowe\Pracownik.cs" />
     <Compile Include="Klasy\Repozytoria\RepozytoriumTypowane.cs" />
+    <Compile Include="Klasy\Testowe\ObiektGeneryczny2.cs" />
+    <Compile Include="Klasy\Testowe\ObiektProsty.cs" />
+    <Compile Include="MonoCecilToReflection\MonoCecilToSystemTypeTest.cs" />
+    <Compile Include="Procesy\Podstawowy\DodawaniePracownikaProces.cs" />
+    <Compile Include="Procesy\Podstawowy\RepozytoriumTestProces.cs" />
+    <Compile Include="Procesy\UnitTestProcesy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\VirtualMachine\VirtualMachine.csproj">
+      <Project>{31e3551d-66c6-44d9-9950-e3daeca00dca}</Project>
+      <Name>VirtualMachine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -17,7 +17,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override void Wykonaj()
         {
-            dynamic b = Pop();
+            dynamic b = PopObject();
             if(b != null)
             {
                 var typ = b.GetType();
@@ -25,14 +25,14 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 if (typOperanda.IsAssignableFrom(typ))
                 {
                     //mamy ten sam typ
-                    Push(b);
+                    PushObject(b);
                 } else
                 {
-                    Push(null);
+                    PushObject(null);
                 }
             } else
             {
-                Push(null);
+                PushObject(null);
             }
             
             WykonajNastepnaInstrukcje();

@@ -15,18 +15,18 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
         public override void Wykonaj()
         {
             var fd = ((Mono.Cecil.FieldReference)instrukcja.Operand);
-            var obiekt = Pop();
+            var obiekt = PopObject();
             var typ = obiekt.GetType();
             var prop = typ.GetProperty(fd.Name);
             if (prop != null)
             {
                 var wartosc = prop.GetValue(obiekt);
-                Push(wartosc);
+                PushObject(wartosc);
             } else
             {
                 var memb = typ.GetField(fd.Name);
                 var wartosc = memb.GetValue(obiekt);
-                Push(wartosc);
+                PushObject(wartosc);
             }
             
             WykonajNastepnaInstrukcje();

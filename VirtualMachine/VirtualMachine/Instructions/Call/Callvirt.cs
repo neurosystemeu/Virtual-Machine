@@ -62,7 +62,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             else
             {
                 //interpretujemy
-                var m = new WykonywanaMetoda();
+                var m = new Metoda();
                 m.NazwaTypu = typDef.FullName;
                 m.NazwaMetody = nazwaMetodyBazowej; //to będzie już uruchomienie na właściwym obiekcie
                 m.AssemblyName = typDef.FullName;
@@ -73,7 +73,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 WczytajLokalneArgumenty(iloscArgumentow);
 
                 //zapisuję aktualną metodę na stosie
-                Push(staraMetoda);
+                PushObject(staraMetoda);
             }                
         }
 

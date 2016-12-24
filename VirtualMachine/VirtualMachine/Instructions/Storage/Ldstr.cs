@@ -16,7 +16,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
         public override void Wykonaj()
         {
             string str = instrukcja.Operand as string;
-            Push(str);
+            PushObject(str);
             WykonajNastepnaInstrukcje();
         }
     }

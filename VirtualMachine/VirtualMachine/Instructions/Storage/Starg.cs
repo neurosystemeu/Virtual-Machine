@@ -18,7 +18,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override void Wykonaj()
         {
-            var o = Pop();
+            var o = PopObject();
             ZapiszLokalnyArgument(o, Indeks);
             WykonajNastepnaInstrukcje();
         }

@@ -27,12 +27,12 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             }
 
             //mamy wynik
-            var dane = Pop();
-            if (dane is WykonywanaMetoda)
+            var dane = PopObject();
+            if (dane is Metoda)
             {
 
                 //mamy metodę która nie zwraca 
-                var metodaDoWznowienia = dane as WykonywanaMetoda;
+                var metodaDoWznowienia = dane as Metoda;
                 WirtualnaMaszyna.AktualnaMetoda = metodaDoWznowienia;
                 WirtualnaMaszyna.AktualnaMetoda.NumerWykonywanejInstrukcji++;
 
@@ -52,8 +52,8 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 }
 
 
-                var metodaDoWznowienia = Pop() as WykonywanaMetoda;
-                Push(wynik); //zwracam wynik na stosie
+                var metodaDoWznowienia = PopObject() as Metoda;
+                PushObject(wynik); //zwracam wynik na stosie
                 WirtualnaMaszyna.AktualnaMetoda = metodaDoWznowienia;
                 WirtualnaMaszyna.AktualnaMetoda.NumerWykonywanejInstrukcji++;
             }

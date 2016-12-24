@@ -22,9 +22,9 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             var td = tr.Resolve();
 
             var typ = td.GetSystemType();
-            var n = (int)Pop();
+            var n = (int)PopObject();
             object arr = Array.CreateInstance(typ, n);
-            Push(arr);
+            PushObject(arr);
             WykonajNastepnaInstrukcje();
         }
 

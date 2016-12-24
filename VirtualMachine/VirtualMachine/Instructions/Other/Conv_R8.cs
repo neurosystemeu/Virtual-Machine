@@ -13,10 +13,10 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override void Wykonaj()
         {
-            dynamic a = Pop();
+            dynamic a = PopObject();
 
             dynamic wynik = (double)a;
-            Push(wynik);            
+            PushObject(wynik);            
 
             WykonajNastepnaInstrukcje();
         }

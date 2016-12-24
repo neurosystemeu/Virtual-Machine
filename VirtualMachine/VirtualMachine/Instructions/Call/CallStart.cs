@@ -9,12 +9,12 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 {
     public class CallStart : InstructionBase
     {
-        public CallStart(WykonywanaMetoda metoda): base(null)
+        public CallStart(Metoda metoda): base(null)
         {
             Metoda = metoda;            
         }
 
-        public WykonywanaMetoda Metoda { get; set; }
+        public Metoda Metoda { get; set; }
 
         public override void Wykonaj()
         {

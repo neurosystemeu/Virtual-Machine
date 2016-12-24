@@ -12,12 +12,71 @@ namespace NeuroSystem.VirtualMachine.Klasy
     {
         #region Mono.Cecil => System.Type
 
-        public static Type GetSystemType(this TypeReference type)
+        public static Type GetSystemType(this TypeReference typeReference)
         {
-            var nazwaTypu = type.GetReflectionName();
-            var typ = Type.GetType(nazwaTypu, f => GetAssemblyByName(f), (assem, name, ignore) => GetTypeBy(assem, name, ignore), true);
+            var genericInstanceType = typeReference as GenericInstanceType;
+            var nazwa = typeReference.Name;
+            var przestrzenNazw = typeReference.Namespace;
+            var pelnaNazwa = typeReference.FullName.Replace("/", "+");
+            var isNested = typeReference.IsNested;
 
-            return typ;
+            if (genericInstanceType == null)
+            {
+                //mamy zwykły typ - sprawdzam tylko nazwę
+
+                var assembly = typeReference.Scope.GetSystemAssembly();
+                var typyWewnetrzne = assembly.GetTypes().Where(t => t.IsNested == isNested);
+                return typyWewnetrzne.Single(t => t.FullName == pelnaNazwa);
+            }
+            else
+            {
+                // mamy generika
+
+                var assembly = genericInstanceType.Scope.GetSystemAssembly();
+                //typ bazowy
+                var typy = assembly.GetTypes().Where(t => t.ContainsGenericParameters && t.IsNested == isNested);
+
+                Type typBazowy;
+                if (isNested)
+                {
+                    var pelnaNazwaWew = pelnaNazwa.Split('<')[0]; //Generyk wewnętrzny ma po < typ parametru generycznego >
+                    typBazowy = typy.Single(t => t.FullName == pelnaNazwaWew);
+                }
+                else
+                {
+                    typBazowy = typy.Single(t => t.Name == nazwa && t.Namespace == przestrzenNazw);
+                }
+
+
+                var listaTypowParametrowGenerycznych = new List<Type>();
+                foreach (var genericArgument in genericInstanceType.GenericArguments)
+                {
+                    var typ = genericArgument.GetSystemType();
+                    listaTypowParametrowGenerycznych.Add(typ);
+                }
+
+                var typSystemowy = typBazowy.MakeGenericType(listaTypowParametrowGenerycznych.ToArray());
+                return typSystemowy;
+            }
+        }
+
+        public static Assembly GetSystemAssembly(this IMetadataScope scope)
+        {
+            var assemblyName = scope as AssemblyNameReference;
+            if (assemblyName != null)
+            {
+                return Assembly.Load(assemblyName.FullName);
+            }
+            else
+            {
+                var moduleDefinition = scope as ModuleDefinition;
+                if (moduleDefinition != null)
+                {
+                    return Assembly.LoadFile(moduleDefinition.FullyQualifiedName);
+                }
+            }
+
+            throw new NotImplementedException();
         }
 
         private static string GetReflectionName(this TypeReference type)
@@ -50,7 +109,13 @@ namespace NeuroSystem.VirtualMachine.Klasy
             return null;
         }
 
+        public static Assembly GetSystemAssembly(this ModuleDefinition module)
+        {
+            return Assembly.LoadFile(module.FullyQualifiedName);
+        }
+
         #endregion
+
 
 
         #region System.Type to Modo.Cecil

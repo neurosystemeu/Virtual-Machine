@@ -15,7 +15,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override void Wykonaj()
         {
-            Pop();
+            PopObject();
             WykonajNastepnaInstrukcje();
         }
     }
