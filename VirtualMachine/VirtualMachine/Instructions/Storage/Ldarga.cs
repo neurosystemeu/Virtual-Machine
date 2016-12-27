@@ -23,13 +23,13 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
         public override void Wykonaj()
         {
             var o = PobierzAdresArgumentu(index);
-            PushObject(o);
+            Push(o);
             WykonajNastepnaInstrukcje();
         }
 
         public override string ToString()
         {
-            return "Ldarga " + index;
+            return base.ToString() + " " + index;
         }
     }
 }

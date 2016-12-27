@@ -7,10 +7,27 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using NeuroSystem.VirtualMachine;
 using NeuroSystem.VirtualMachine.Core.Components;
 using NeuroSystem.VirtualMachine.Instrukcje;
 using NeuroSystem.VirtualMachine.Klasy;
 using Polenter.Serialization;
+
+namespace NS
+{
+    public static class Debug
+    {
+        public static VirtualMachine VM;
+        public static string Stack => VM?.Stos.ToString();
+        public static string Instruction => VM?.PobierzAktualnaInstrukcje().ToString();
+        public static string Method => VM?.AktualnaMetoda?.ToString();
+        public static string LocalArguments => VM?.AktualnaMetoda?.LocalArguments?.ToString();
+        public static string LocalVariables => VM?.AktualnaMetoda?.LocalVariables?.ToString();
+
+
+    }
+
+}
 
 namespace NeuroSystem.VirtualMachine
 {
@@ -19,9 +36,9 @@ namespace NeuroSystem.VirtualMachine
         public VirtualMachine()
         {
             Stos = new Stack();
-            WirtualnaMaszynaDebug = this; // do debugowania        
+            NS.Debug.VM = this; // do debugowania
+               
         }
-
 
         #region start
         public object Start(object instancja, string nazwaMetodyStartu = "Start", bool czyWykonywac = true)
@@ -88,11 +105,11 @@ namespace NeuroSystem.VirtualMachine
 
 
 
-        public static VirtualMachine WirtualnaMaszynaDebug;
+        
 
         public void Wykonuj()
         {
-            WirtualnaMaszynaDebug = this; // do debugowania 
+            NS.Debug.VM = this; // do debugowania 
 
             while (CzyWykonywacInstrukcje)
             {
@@ -270,6 +287,11 @@ namespace NeuroSystem.VirtualMachine
 
                 return obiekt;
             }
+        }
+
+        public override string ToString()
+        {
+            return "VM " + Status;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override string ToString()
         {
-            return "Starg " + Indeks;
+            return base.ToString() + " " + Indeks;
         }
     }
 }

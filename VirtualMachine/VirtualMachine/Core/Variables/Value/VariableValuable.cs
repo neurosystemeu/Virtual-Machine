@@ -19,5 +19,10 @@ namespace NeuroSystem.VirtualMachine.Core.Variables.Value
         {
             return Warosc;
         }
+
+        public override string ToString()
+        {
+            return "OW: " + Warosc;
+        }
     }
 }

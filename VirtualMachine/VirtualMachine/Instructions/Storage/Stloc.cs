@@ -28,7 +28,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override string ToString()
         {
-            return "Stloc " + Indeks;
+            return base.ToString() + " " + Indeks;
         }
     }
 }

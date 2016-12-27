@@ -25,6 +25,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             var methodRef = instrukcja.Operand as MethodReference;
             var methodDef = methodRef.Resolve();
             var parameters = new List<object>();
+            object instance = null;
 
             foreach (var paramDef in methodRef.Parameters)
             {
@@ -32,293 +33,102 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             }
             if (methodRef.HasThis)
             {
-                parameters.Add(PopObject());
+                instance = PopObject();
             }
 
             parameters.Reverse();
 
             if (methodDef.IsSetter)
             {
-                setter(methodDef, parameters);
+                setter(methodDef, instance, parameters);
             }
             else if (methodDef.IsGetter)
             {
-                getter(methodDef, parameters);
+                getter(methodRef, instance, parameters);
             }
             else
             {
-                ////Wykonywanie
-                //if (CzyWykonacCzyInterpretowac(methodDef) == true)
-                //{
-                    
+                //Wykonywanie
+                if (CzyWykonacCzyInterpretowac(methodDef) == true)
+                {
+                    //wykonywanie
+                    Type type = instance?.GetType();
+                    if (type == null)
+                    {
+                        //mamy statyczną metodę
+                        type = methodDef.DeclaringType.GetSystemType();
+                    }
+                   
+                    var methodInfo = type.GetMethod(methodRef);
+                    var ret = methodInfo.Wykonaj(instance, parameters.ToArray());
+                    if (methodInfo.ReturnType == typeof(void))
+                    {
+                        //nie zwracam wyniku
+                    }
+                    else
+                    {
+                        PushObject(ret);
+                    }
+                    WykonajNastepnaInstrukcje();
+                }
+                else
+                {
+                    //interpretowanie
 
-                //    //wykonujemy
-                //    //wykonujemy metodę
-                //    var typDeklarujacy = methodDef.DeclaringType.Resolve().GetSystemType();
-                    
+                    var nazwaMetodyBazowej = methodDef.Name;
+                    var typDef = instance.GetType().GetTypeDefinition();
+                    var staraMetoda = WirtualnaMaszyna.AktualnaMetoda;
 
-                    
-                //    if (methodDef.HasThis)
-                //    {
-                        
-                //        //metoda ma this (metoda obiektu)
-                //        var instancja = parameters.First();
-                //        var argumenty = parameters;
-                //        var zmienioneArgumenty = new List<object>();
-                //        var obj = instancja;
+                    var m = new Metoda();
+                    m.NazwaTypu = methodDef.FullName;
+                    m.NazwaMetody = nazwaMetodyBazowej; //to będzie już uruchomienie na właściwym obiekcie
+                    m.AssemblyName = typDef.FullName;
+                    m.NumerWykonywanejInstrukcji = 0;
 
-                //        //pobieram dostępne motody i sprawdzam najlepsze dopasowanie
-                //        //var typDeklarujacy = md.DeclaringType.Resolve().GetSystemType();
-                //        if (typDeklarujacy == null)
-                //        {
-                //            typDeklarujacy = obj.GetType();
-                //        }
-                //        var meth = typDeklarujacy.GetMethods().Where(m => m.Name == methodDef.Name);
+                    WirtualnaMaszyna.AktualnaMetoda = m;
 
-                //        if (meth.Count() >= 1)
-                //        {
-                //            //mamy więcej metod o danej nazwie - sprawdzamy dopasowanie po parametrach
+                    WczytajLokalneArgumenty(methodDef.Parameters.Count);
 
-                //            foreach (var methodInfo in meth)
-                //            {
-                //                zmienioneArgumenty.Clear();
-
-                //                var parametry = methodInfo.GetParameters();
-                //                int i = 0;
-                //                bool czyZgodneParametry = true;
-                //                if (parametry.Count() != argumenty.Count())
-                //                {
-                //                    //metoda o dobrej nazwie ale zle ilosci parametrow
-                //                    continue;
-                //                }
-
-                //                foreach (var parameterInfo in parametry)
-                //                {
-                //                    var argument = argumenty[i];
-                //                    if (argument is int)
-                //                    {
-                //                        //mamy albo int albo enum
-                //                        if (parameterInfo.ParameterType != typeof(int))
-                //                        {
-                //                            if (parameterInfo.ParameterType == typeof(bool))
-                //                            {
-                //                                var j = (int)argument;
-                //                                zmienioneArgumenty.Add(j == 1);
-                //                            }
-                //                            else if (!parameterInfo.ParameterType.IsEnum)
-                //                            {
-                //                                czyZgodneParametry = false;
-                //                                break;
-                //                            }
-                //                            else
-                //                            {
-                //                                //zgodny ale enum zmieniam go na enum
-                //                                var e = Enum.ToObject(parameterInfo.ParameterType, (int)argument);
-                //                                zmienioneArgumenty.Add(e);
-                //                            }
-                //                        }
-                //                        else
-                //                        {
-                //                            //zgodny i int
-                //                            zmienioneArgumenty.Add(argument);
-                //                        }
-                //                    }
-                //                    else
-                //                    {
-
-                //                        if (argument != null)
-                //                        {
-                //                            var argTyp = argumenty[i].GetType();
-                //                            czyTypySaTakieSame(argTyp, parameterInfo.ParameterType);
-                //                            if (czyTypySaTakieSame(argTyp, parameterInfo.ParameterType) == false)
-                //                            {
-                //                                czyZgodneParametry = false;
-                //                                break;
-                //                            }
-                //                            else
-                //                            {
-                //                                //zgodny null
-                //                                zmienioneArgumenty.Add(argument);
-                //                            }
-                //                        }
-                //                        else
-                //                        {
-                //                            if (parameterInfo.ParameterType.IsValueType == true)
-                //                            {
-                //                                czyZgodneParametry = false;
-                //                                break;
-                //                            }
-                //                            else
-                //                            {
-                //                                zmienioneArgumenty.Add(argument);
-                //                            }
-                //                        }
-                //                    }
-                //                    i++;
-                //                }
-                //                //sprawdzanie dopasowania dla tego motody zakończone
-                //                if (czyZgodneParametry == true)
-                //                {
-
-                //                    //mamy dopasowaną metodę
-                //                    //zamieniam listę argumentów
-                //                    argumenty = zmienioneArgumenty.ToArray();
-                //                    try
-                //                    {
-                //                        if (gm != null && gm.HasGenericArguments == true)
-                //                        {
-                //                            var typ = instancja.GetType();
-                //                            var typParametruGenerycznego = gm.GenericArguments[0].GetSystemType();
-                //                            MethodInfo method = typ.GetMethod(mr.Name);
-                //                            MethodInfo generic = method.MakeGenericMethod(typParametruGenerycznego);
-                //                            var wynik = generic.Invoke(instancja, argumenty);
-                //                            PushObject(wynik);
-                //                        }
-                //                        else if (mr.ReturnType.FullName != typeof(void).FullName)
-                //                        {
-                //                            var wynik = methodInfo.Invoke(instancja, argumenty);
-                //                            PushObject(wynik);
-                //                        }
-                //                        else
-                //                        {
-                //                            methodInfo.Invoke(instancja, argumenty);
-                //                        }
-
-                //                        WykonajNastepnaInstrukcje();
-                //                        return;
-                //                    }
-                //                    catch (Exception ex)
-                //                    {
-
-                //                    }
-                //                    break;
-                //                }
-
-                //            }
-                //        }
-                //        //jeśli tu dochodzimy to znaczy że nie udało się dopasować parametrów - lub jest jedna metoda
-                //        //uruchamiamy to przez interefejs dynamic
-
-                //        if (gm != null && gm.HasGenericArguments == true)
-                //        {
-                //            var typ = instancja.GetType();
-                //            var typParametruGenerycznego = gm.GenericArguments[0].GetSystemType();
-                //            MethodInfo method = typ.GetMethod(mr.Name);
-                //            MethodInfo generic = method.MakeGenericMethod(typParametruGenerycznego);
-                //            var wynik = generic.Invoke(instancja, argumenty);
-                //            PushObject(wynik);
-                //        }
-                //        else
-                //        {
-                //            if (mr.ReturnType.FullName != typeof(void).FullName && mr.HasGenericParameters == false)
-                //            {
-                //                var wynikDyn = Dynamic.InvokeMember(instancja, mr.Name, argumenty);
-                //                var wynik = (object)wynikDyn;
-                //                PushObject(wynik);
-                //            }
-                //            else if (mr.ReturnType.FullName != typeof(void).FullName && mr.HasGenericParameters == true)
-                //            {
-                //                var typ = instancja.GetType();
-                //                var genParam = md.GenericParameters[0];
-                //                var genD = genParam.Resolve();
-
-                //                var typParametruGenerycznego = md.GenericParameters[0].GetSystemType();
-                //                MethodInfo method = typ.GetMethod(mr.Name);
-                //                MethodInfo generic = method.MakeGenericMethod(typParametruGenerycznego);
-                //                var wynik = generic.Invoke(instancja, argumenty);
-                //                PushObject(wynik);
-                //            }
-                //            else
-                //            {
-                //                Dynamic.InvokeMemberAction(instancja, mr.Name, argumenty);
-                //            }
-                //        }
-                //        WykonajNastepnaInstrukcje();
-                //    }
-                //    else if (mr.Name.Equals("op_Equality"))
-                //    {
-                //        dynamic a = arg[0];
-                //        dynamic b = arg[1];
-
-                //        dynamic wynik = a == b;
-                //        PushObject(wynik);
-                //        WykonajNastepnaInstrukcje();
-                //    }
-                //    else
-                //    {
-                //        //metoda statyczna (bez this)
-                //        arg.Reverse();
-                //        var staticContext = InvokeContext.CreateStatic;
-                //        var typ = md.DeclaringType.GetSystemType();
-                //        var wynikDyn = Dynamic.InvokeMember(staticContext(typ), mr.Name, arg.ToArray());
-
-                //        var wynik = (object)wynikDyn;
-                //        if (mr.ReturnType.FullName != typeof(void).FullName)
-                //        {
-                //            PushObject(wynik);
-                //        }
-                //        WykonajNastepnaInstrukcje();
-                //    }
-                //}
-                //else
-                //{
-                //    //interpretujemy
-                //    var staraMetoda = WirtualnaMaszyna.AktualnaMetoda;
-
-                //    var m = new Metoda();
-                //    m.NazwaTypu = methodDef.DeclaringType.FullName;
-                //    m.NazwaMetody = methodDef.Name;
-                //    m.AssemblyName = methodDef.DeclaringType.Module.FullyQualifiedName;
-                //    m.NumerWykonywanejInstrukcji = 0;
-
-                //    WirtualnaMaszyna.AktualnaMetoda = m;
-
-                //    //pobieram argumenty ze stosu i kładę do zmiennych funkcji
-                //    //WczytajLokalneArgumenty(iloscArgumentow);
-                //    WirtualnaMaszyna.AktualnaMetoda.LocalArguments.Wczytaj(parameters.ToArray());
-
-                //    //zapisuję aktualną metodę na stosie
-                //    PushObject(staraMetoda);
-                //    WykonajNastepnaInstrukcje();
-                //}
+                    //zapisuję aktualną metodę na stosie
+                    PushObject(staraMetoda);
+                }
             }
 
+            
         }
 
-        private void setter(MethodDefinition methodDefinition, List<object> parameters)
+        private void setter(MethodDefinition methodDefinition, object instance, List<object> parameters)
         {
             //wykonujemy settera
             var dane = parameters.Last();
-            var instancja = parameters.First();
-            var typ = instancja.GetType();
+            var typ = instance.GetType();
 
             var m2 = typ.GetProperty(methodDefinition.Name.Replace("set_", ""));
 
-            m2.SetValue(instancja, dane);
+            m2.SetValue(instance, dane);
             WykonajNastepnaInstrukcje();
         }
 
-        private void getter(MethodDefinition methodDefinition, List<object> parameters)
+        private void getter(MethodReference methodReference,object instance, List<object> parameters)
         {
             //wykonuje gettera - 
-            var instancja = parameters.First();
+            
+            var typ = methodReference.DeclaringType.GetSystemType();
 
-            var typ = methodDefinition.DeclaringType.GetSystemType();
-
-            var argumenty = parameters.Skip(1).ToArray(); //bez this
-            var propertyInfo = typ.GetProperty(methodDefinition.Name.Replace("get_", ""));
+            var argumenty = parameters.ToArray(); 
+            var propertyInfo = typ.GetProperty(methodReference.Name.Replace("get_", ""));
             object wynik = null;
 
-            if (typ.IsGenericType)
+            if (typ.ContainsGenericParameters)
             {
-                var typNulleblowany = instancja.GetType();
+                var typNulleblowany = instance.GetType();
                 var typNulleble = typ.MakeGenericType(typNulleblowany);
-                var pi = typNulleble.GetProperty(methodDefinition.Name.Replace("get_", ""));
-                wynik = pi.GetValue(instancja, argumenty);
+                var pi = typNulleble.GetProperty(methodReference.Name.Replace("get_", ""));
+                wynik = pi.GetValue(instance, argumenty);
             }
             else
             {
-                wynik = propertyInfo.GetValue(instancja, argumenty);
+                wynik = propertyInfo.GetValue(instance, argumenty);
             }
 
             if (wynik == null)
@@ -786,7 +596,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
         public override string ToString()
         {
             var md = instrukcja.Operand as MethodReference;
-            return "Call " + md.Name.ToString();
+            return base.ToString() + " " + md.Name;
         }
     }
 }

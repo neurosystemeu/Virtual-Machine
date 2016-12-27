@@ -129,7 +129,7 @@ namespace NeuroSystem.VirtualMachine
 
         public override string ToString()
         {
-            return "Metoda " + NazwaMetody;
+            return "Metoda 0x" + OffsetWykonywanejInstrukcji.ToString("X") + ":" + NazwaMetody + " " + NazwaTypu + " " + AssemblyName;
         }
     }
 }

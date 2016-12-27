@@ -28,7 +28,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override string ToString()
         {
-            return "Ldloc " + Indeks;
+            return base.ToString() + " " + Indeks;
         }
     }
 }

@@ -103,6 +103,11 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             WirtualnaMaszyna.Stos.PushObject(o);
         }
 
+        public void Push(ElementBase o)
+        {
+            WirtualnaMaszyna.Stos.Push(o);
+        }
+
         /// <summary>
         /// Zwraca obiekt
         /// jeśli jest adres na stosie to zamienia na obiekt
@@ -130,6 +135,11 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
         public object PobierzElementZeStosu(int numerElementuOdSzczytu)
         {
             return WirtualnaMaszyna.Stos.PobierzElementZeStosu(numerElementuOdSzczytu);
+        }
+
+        public override string ToString()
+        {
+            return GetType().Name + " 0x" + WirtualnaMaszyna.AktualnaMetoda.OffsetWykonywanejInstrukcji.ToString("X");
         }
 
         public static InstructionBase UtworzInstrukcje(Instruction instrukcja)

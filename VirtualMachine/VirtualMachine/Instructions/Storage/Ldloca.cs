@@ -23,13 +23,13 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             var vd = vr.Resolve();
 
             var o = PobierzAdresZmiennejLokalnej(vr.Index);
-            PushObject(o);
+            Push(o);
             WykonajNastepnaInstrukcje();
         }
 
         public override string ToString()
         {
-            return "Ldloca " + Operand;
+            return base.ToString() + " " + Operand;
         }
     }
 }
