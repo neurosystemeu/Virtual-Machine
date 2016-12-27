@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 using Mono.Cecil.Cil;
 using Mono.Cecil;
 using NeuroSystem.VirtualMachine.Klasy;
-using Dynamitey;
-using Dynamitey.Internal;
 using NeuroSystem.VirtualMachine.Core;
 using NeuroSystem.VirtualMachine.Instrukcje.Klasy;
 
