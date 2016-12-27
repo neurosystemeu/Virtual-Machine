@@ -164,6 +164,15 @@ namespace NeuroSystem.VirtualMachine.Core
                         return false;
                     }
                 }
+                else if (parametryMetody[i].ParameterType.IsGenericType == true &&
+                             monoParam[i].ParameterType.IsGenericInstance == true)
+                {
+                    //mamy generyczne typy
+                    if (parametryMetody[i].ParameterType.Name != monoParam[i].ParameterType.Name)
+                    {
+                        return false;
+                    }
+                }
                 else
                 {
                     if (parametryMetody[i].ParameterType.IsGenericParameter == false &&
@@ -185,7 +194,7 @@ namespace NeuroSystem.VirtualMachine.Core
 
 
             //Czy takie same typy zwraca
-            if (methodInfo.ReturnType.IsGenericParameter == methodReference.ReturnType.HasGenericParameters)
+            if (methodInfo.ReturnType.IsGenericType == methodReference.ReturnType.IsGenericInstance)
             {
                 if (methodInfo.ReturnType.IsGenericType == false &&
                     methodReference.ReturnType.IsGenericInstance == false)

@@ -23,6 +23,7 @@ namespace NS
         public static string Method => VM?.AktualnaMetoda?.ToString();
         public static string LocalArguments => VM?.AktualnaMetoda?.LocalArguments?.ToString();
         public static string LocalVariables => VM?.AktualnaMetoda?.LocalVariables?.ToString();
+        public static int StopIterationNumber =-1;
     }
 }
 
@@ -104,6 +105,9 @@ namespace NeuroSystem.VirtualMachine
             {
                 try
                 {
+                    if (NS.Debug.StopIterationNumber == NumerIteracji)
+                    {
+                    }
                     aktualnaInstrukcja = PobierzAktualnaInstrukcje();
                     aktualnaInstrukcja.Wykonaj();
                     NumerIteracji++;
@@ -278,7 +282,7 @@ namespace NeuroSystem.VirtualMachine
 
         public override string ToString()
         {
-            return "VM " + Status;
+            return "VM " + Status + " iter:" + NumerIteracji;
         }
     }
 }

@@ -52,7 +52,13 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public object PobierzLokalnyArgument(int indeks)
         {
-            return WirtualnaMaszyna.AktualnaMetoda.LocalArguments.Pobierz(indeks);
+            var obiekt = WirtualnaMaszyna.AktualnaMetoda.LocalArguments.Pobierz(indeks);
+            var ow = obiekt as ObjectWraperBase;
+            if (ow != null)
+            {
+                return ow.GetValue();
+            }
+            return obiekt;
         }
 
         public void ZapiszLokalnaZmienna(object o, int indeks)
@@ -62,7 +68,13 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public object PobierzLokalnaZmienna(int indeks)
         {
-            return WirtualnaMaszyna.AktualnaMetoda.LocalVariables.Pobierz(indeks);
+            var obiekt = WirtualnaMaszyna.AktualnaMetoda.LocalVariables.Pobierz(indeks);
+            var ow = obiekt as ObjectWraperBase;
+            if (ow != null)
+            {
+                return ow.GetValue();
+            }
+            return obiekt;
         }
 
         public LocalVariableAddress PobierzAdresZmiennejLokalnej(int indeks)

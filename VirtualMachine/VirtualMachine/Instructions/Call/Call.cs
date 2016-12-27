@@ -8,6 +8,7 @@ using Mono.Cecil.Cil;
 using Mono.Cecil;
 using NeuroSystem.VirtualMachine.Klasy;
 using NeuroSystem.VirtualMachine.Core;
+using NeuroSystem.VirtualMachine.Core.Attributes;
 using NeuroSystem.VirtualMachine.Instrukcje.Klasy;
 
 namespace NeuroSystem.VirtualMachine.Instrukcje
@@ -25,7 +26,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             var parameters = new List<object>();
             object instance = null;
 
-            if (methodRef.FullName.Equals("NeuroSystem.VirtualMachine.VirtualMachine::Hibernate()"))
+            if (methodRef.FullName.Equals("System.Void NeuroSystem.VirtualMachine.VirtualMachine::Hibernate()"))
             {
                 //wywołał metodę do hibernacji wirtualnej maszyny
                 WirtualnaMaszyna.HibernateVirtualMachine();
@@ -85,14 +86,27 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                     var staraMetoda = WirtualnaMaszyna.AktualnaMetoda;
 
                     var m = new Metoda();
-                    m.NazwaTypu = methodDef.FullName;
+                    m.NazwaTypu = methodDef.DeclaringType.FullName;
                     m.NazwaMetody = nazwaMetodyBazowej; //to będzie już uruchomienie na właściwym obiekcie
-                    m.AssemblyName = typDef.FullName;
+                    m.AssemblyName = methodDef.Module.FullyQualifiedName;
                     m.NumerWykonywanejInstrukcji = 0;
 
                     WirtualnaMaszyna.AktualnaMetoda = m;
+                    var iloscArgumentow = methodDef.Parameters.Count;
 
-                    WczytajLokalneArgumenty(methodDef.Parameters.Count);
+                    if (methodRef.HasThis)
+                    {
+                        PushObject(instance);
+                        iloscArgumentow += 1;
+                    }
+
+                    foreach (var parameter in parameters)
+                    {
+                        PushObject(parameter);
+                    }
+
+                    WczytajLokalneArgumenty(iloscArgumentow);
+                    
 
                     //zapisuję aktualną metodę na stosie
                     PushObject(staraMetoda);
