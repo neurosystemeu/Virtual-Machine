@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace NeuroSystem.VirtualMachine.Klasy
 {
-    public enum EnumStatusWirtualnejMaszyny
+    public enum VirtualMachineState
     {
-        Zatrzymana,
-        Wykonywanie,        
-        RzuconyWyjatek,
-        Wykonana,
-        Zahibernowana
+        Stoped,
+        Executing,
+        Exception,
+        Executed,
+        Hibernated
     }
 }

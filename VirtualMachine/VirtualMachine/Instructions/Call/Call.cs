@@ -27,6 +27,13 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             var parameters = new List<object>();
             object instance = null;
 
+            if (methodRef.FullName.Equals("NeuroSystem.VirtualMachine.VirtualMachine::Hibernate()"))
+            {
+                //wywołał metodę do hibernacji wirtualnej maszyny
+                WirtualnaMaszyna.HibernateVirtualMachine();
+                return;
+            }
+
             foreach (var paramDef in methodRef.Parameters)
             {
                 parameters.Add(PopObject());

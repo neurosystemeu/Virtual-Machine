@@ -23,10 +23,7 @@ namespace NS
         public static string Method => VM?.AktualnaMetoda?.ToString();
         public static string LocalArguments => VM?.AktualnaMetoda?.LocalArguments?.ToString();
         public static string LocalVariables => VM?.AktualnaMetoda?.LocalVariables?.ToString();
-
-
     }
-
 }
 
 namespace NeuroSystem.VirtualMachine
@@ -37,11 +34,10 @@ namespace NeuroSystem.VirtualMachine
         {
             Stos = new Stack();
             NS.Debug.VM = this; // do debugowania
-               
         }
 
         #region start
-        public object Start(object instancja, string nazwaMetodyStartu = "Start", bool czyWykonywac = true)
+        public object Start(object instancja, string nazwaMetodyStartu = "Start", bool doExecuting = true)
         {
             NumerIteracji = 0;
             Instance = instancja;
@@ -61,9 +57,9 @@ namespace NeuroSystem.VirtualMachine
             Stos.PushObject(instancja);
             m.Instrukcje = new List<InstructionBase>() { new CallStart(m) };
 
-            if (czyWykonywac)
+            if (doExecuting)
             {
-                Wykonuj();
+                Execute();
                 return Wynik;
             }
             else
@@ -78,14 +74,7 @@ namespace NeuroSystem.VirtualMachine
         }
         #endregion
 
-
-
-
-
-
-
-
-
+        
         public TD Start<T, TD>(T instancja, Expression<Func<T, TD>> startMethod, bool czyWykonywac = true)
         {
             WalidujMetodyObiektu(instancja);
@@ -107,7 +96,7 @@ namespace NeuroSystem.VirtualMachine
 
         
 
-        public void Wykonuj()
+        public void Execute()
         {
             NS.Debug.VM = this; // do debugowania 
 
@@ -122,7 +111,7 @@ namespace NeuroSystem.VirtualMachine
                 catch (Exception ex)
                 {
                     CzyWykonywacInstrukcje = false;
-                    Status = EnumStatusWirtualnejMaszyny.RzuconyWyjatek;
+                    Status = VirtualMachineState.Exception;
                     //RzuconyWyjatekCalosc = ex.ToString();
                     RzuconyWyjatekWiadomosc = ex.Message; ;
                     if (Debugger.IsAttached)
@@ -134,32 +123,30 @@ namespace NeuroSystem.VirtualMachine
             }
         }
 
-        public void WykonujKrokowo(long iloscKrokow)
+        public void ExecuteStep(long stepCount)
         {
-            var WirtualnaMaszyna = this; // do debugowania 
-
-            while (CzyWykonywacInstrukcje && iloscKrokow > 0)
+            while (CzyWykonywacInstrukcje && stepCount > 0)
             {
                 aktualnaInstrukcja = PobierzAktualnaInstrukcje();
                 aktualnaInstrukcja.Wykonaj();
                 NumerIteracji++;
-                iloscKrokow--;
+                stepCount--;
             }
         }
 
         public void Resume()
         {
-            Status = EnumStatusWirtualnejMaszyny.Wykonana;
+            Status = VirtualMachineState.Executed;
             CzyWykonywacInstrukcje = true;
             AktualnaMetoda.NumerWykonywanejInstrukcji++;
 
-            Wykonuj();
+            Execute();
         }
 
-        public void HibernujWirtualnaMaszyne()
+        public void HibernateVirtualMachine()
         {
             CzyWykonywacInstrukcje = false;
-            Status = EnumStatusWirtualnejMaszyny.Zahibernowana;
+            Status = VirtualMachineState.Hibernated;
         }
 
 
@@ -200,7 +187,7 @@ namespace NeuroSystem.VirtualMachine
         public object Instance { get; set; }
         public Stack Stos { get; set; }
         public Metoda AktualnaMetoda { get; set; }
-        public EnumStatusWirtualnejMaszyny Status { get; set; }
+        public VirtualMachineState Status { get; set; }
         public string RzuconyWyjatekCalosc { get; set; }
         public string RzuconyWyjatekWiadomosc { get; set; }
         public bool CzyWykonywacInstrukcje { get; set; }

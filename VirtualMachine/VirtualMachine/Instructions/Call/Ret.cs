@@ -22,7 +22,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             {
                 //mamy koniec wykonywania procedury (bez wyniku) 
                 WirtualnaMaszyna.CzyWykonywacInstrukcje = false;
-                WirtualnaMaszyna.Status = EnumStatusWirtualnejMaszyny.Wykonana;
+                WirtualnaMaszyna.Status = VirtualMachineState.Executed;
                 return;
             }
 
@@ -46,7 +46,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 {
                     //mamy koniec wykonywania funkcji (zwracającej wynik)
                     WirtualnaMaszyna.CzyWykonywacInstrukcje = false;
-                    WirtualnaMaszyna.Status = EnumStatusWirtualnejMaszyny.Wykonana;
+                    WirtualnaMaszyna.Status = VirtualMachineState.Executed;
                     WirtualnaMaszyna.Wynik = wynik;
                     return;
                 }

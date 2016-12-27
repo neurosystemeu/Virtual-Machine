@@ -17,7 +17,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
 
         public override void Wykonaj()
         {
-            WirtualnaMaszyna.Status = EnumStatusWirtualnejMaszyny.RzuconyWyjatek;
+            WirtualnaMaszyna.Status = VirtualMachineState.Exception;
             var rzuconyWyjatek = PopObject();
             ObslugaRzuconegoWyjatku(WirtualnaMaszyna, rzuconyWyjatek);
         }
@@ -43,7 +43,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                         if (blok.HandlerType == ExceptionHandlerType.Catch)
                         {
                             //wracam do zwykłej obsługi kodu                            
-                            wirtualnaMaszyna.Status = EnumStatusWirtualnejMaszyny.Wykonywanie;
+                            wirtualnaMaszyna.Status = VirtualMachineState.Executing;
                         }
                         
                         return;
