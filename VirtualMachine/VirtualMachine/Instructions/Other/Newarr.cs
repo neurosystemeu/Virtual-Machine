@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NeuroSystem.VirtualMachine.Instrukcje;
 using NeuroSystem.VirtualMachine.Klasy;
 using Mono.Cecil.Cil;
+using NeuroSystem.VirtualMachine.Core;
 
 namespace NeuroSystem.VirtualMachine.Instrukcje
 {

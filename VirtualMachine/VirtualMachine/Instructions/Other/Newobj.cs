@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NeuroSystem.VirtualMachine.Core;
 using NeuroSystem.VirtualMachine.Klasy;
 
 namespace NeuroSystem.VirtualMachine.Instrukcje

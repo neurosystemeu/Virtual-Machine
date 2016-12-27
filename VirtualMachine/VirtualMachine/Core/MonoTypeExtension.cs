@@ -1,12 +1,10 @@
-﻿using Mono.Cecil;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Mono.Cecil;
 
-namespace NeuroSystem.VirtualMachine.Klasy
+namespace NeuroSystem.VirtualMachine.Core
 {
     public static class MonoTypeExtension
     {
@@ -79,16 +77,6 @@ namespace NeuroSystem.VirtualMachine.Klasy
             throw new NotImplementedException();
         }
 
-        private static string GetReflectionName(this TypeReference type)
-        {
-            if (type.IsGenericInstance)
-            {
-                var genericInstance = (GenericInstanceType)type;
-                return string.Format("{0}.{1}[{2}]", genericInstance.Namespace, type.Name, String.Join(",", genericInstance.GenericArguments.Select(p => p.GetReflectionName()).ToArray()));
-            }
-            return type.FullName;
-        }
-
         public static Type GetTypeBy(Assembly assem, string name, bool ignore)
         {
             var a = AppDomain.CurrentDomain.GetAssemblies();
@@ -130,6 +118,103 @@ namespace NeuroSystem.VirtualMachine.Klasy
         }
         #endregion
 
+
+        #region System.Type Method
+
+        public static object Wykonaj(this MethodInfo methodInfo,object instancja, params object[] parameters)
+        {
+            //metody o danej nazwie
+            var ret = methodInfo.Invoke(instancja, parameters);
+
+            return ret;
+        }
+
+        public static MethodInfo GetMethod(this Type typ, MethodReference methodReference)
+        {
+            //metody o danej nazwie
+            var metody = typ.GetMethods().Where(m=> m.Name == methodReference.Name);
+
+            return metody.FirstOrDefault(m => m.CzyTakieSameMetody(methodReference));
+        }
+
+        public static bool CzyTakieSameMetody(this MethodInfo methodInfo, MethodReference methodReference)
+        {
+            //czy metody generyczne
+            if (methodInfo.IsGenericMethod != methodReference.HasGenericParameters)
+            {
+                return false;
+            }
+            
+            var parametryMetody = methodInfo.GetParameters();
+            if (parametryMetody.Length != methodReference.Parameters.Count)
+            {
+                return false;
+            }
+
+            //mamy taką samą ilość parametrów - sprawdzam ich typy
+            var monoParam = methodReference.Parameters;
+            for (int i = 0; i < parametryMetody.Length; i++)
+            {
+                if (parametryMetody[i].ParameterType.IsGenericParameter == true &&
+                    monoParam[i].ParameterType.IsGenericParameter == true)
+                {
+                    //mamy dwa generyczne parametry - sprawdzam ich nazwy
+                    if (parametryMetody[i].ParameterType.Name != monoParam[i].ParameterType.Name)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (parametryMetody[i].ParameterType.IsGenericParameter == false &&
+                        monoParam[i].ParameterType.IsGenericParameter == false)
+                    {
+                        //mamy zwykłe parametry
+                        if (parametryMetody[i].ParameterType != monoParam[i].ParameterType.GetSystemType())
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        //mamy różne parametry (generyczny i zwykły)
+                        return false;
+                    }
+                }
+            }
+
+
+            //Czy takie same typy zwraca
+            if (methodInfo.ReturnType.IsGenericParameter == methodReference.ReturnType.HasGenericParameters)
+            {
+                if (methodInfo.ReturnType.IsGenericType == false &&
+                    methodReference.ReturnType.IsGenericInstance == false)
+                {
+                    //mamy zwykłe parametry
+                    if (methodInfo.ReturnType != methodReference.ReturnType.GetSystemType())
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    //mamy dwa generyczne parametry - sprawdzam ich nazwy
+                    if (methodInfo.ReturnType.Name != methodReference.ReturnType.Name)
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                //mamy generyczny typ i zwykły
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
 
     }
 }

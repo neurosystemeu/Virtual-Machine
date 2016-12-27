@@ -76,6 +76,8 @@
     <Compile Include="Klasy\Repozytoria\RepozytoriumTypowane.cs" />
     <Compile Include="Klasy\Testowe\ObiektGeneryczny2.cs" />
     <Compile Include="Klasy\Testowe\ObiektProsty.cs" />
+    <Compile Include="Klasy\Testowe\ObiektZMetodami.cs" />
+    <Compile Include="MethodInvoker\UnitTest1.cs" />
     <Compile Include="MonoCecilToReflection\MonoCecilToSystemTypeTest.cs" />
     <Compile Include="Procesy\Podstawowy\DodawaniePracownikaProces.cs" />
     <Compile Include="Procesy\Podstawowy\RepozytoriumTestProces.cs" />
