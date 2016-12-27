@@ -47,8 +47,6 @@ namespace NeuroSystem.UnitTestVirtualMachine.Procesy
             }
 
             var vmWynik = vm.Wynik; //wynik procesu interpretowanego w VM
-
-
             Assert.AreEqual(wynik, vmWynik);
         }
     }

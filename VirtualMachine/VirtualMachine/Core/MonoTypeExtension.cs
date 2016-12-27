@@ -133,17 +133,10 @@ namespace NeuroSystem.VirtualMachine.Core
                     var paramType = param.GetType();
                     if (paramType.IsGenericType)
                     {
+                        //generyczna z nie rozwiązanym parametrem generycznym
                         var genericType = paramType.GenericTypeArguments;
                         methodInfo = methodInfo.MakeGenericMethod(genericType[0]);
                     }
-                    else
-                    {
-                        throw new NotImplementedException("Brak obsługi wykonania metody generycznej tego typu");
-                    }
-                }
-                else
-                {
-                    throw new NotImplementedException("Brak obsługi wykonania metody generycznej tego typu z instancją (nie statycznej)");
                 }
             }
             var ret = methodInfo.Invoke(instancja, parameters);
