@@ -123,13 +123,34 @@ namespace NeuroSystem.VirtualMachine.Core
 
         public static object Wykonaj(this MethodInfo methodInfo,object instancja, params object[] parameters)
         {
-            //metody o danej nazwie
+            if (methodInfo.IsGenericMethod )
+            {
+                //mamy generyczną funkcję
+                if (instancja == null)
+                {
+                    //generyczną i statyczną
+                    var param = parameters[0];
+                    var paramType = param.GetType();
+                    if (paramType.IsGenericType)
+                    {
+                        var genericType = paramType.GenericTypeArguments;
+                        methodInfo = methodInfo.MakeGenericMethod(genericType[0]);
+                    }
+                    else
+                    {
+                        throw new NotImplementedException("Brak obsługi wykonania metody generycznej tego typu");
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException("Brak obsługi wykonania metody generycznej tego typu z instancją (nie statycznej)");
+                }
+            }
             var ret = methodInfo.Invoke(instancja, parameters);
-
             return ret;
         }
 
-        public static MethodInfo GetMethod(this Type typ, MethodReference methodReference)
+        public static MethodInfo GetMethod(this Type typ, MethodDefinition methodReference)
         {
             //metody o danej nazwie
             var metody = typ.GetMethods().Where(m=> m.Name == methodReference.Name);
@@ -137,7 +158,7 @@ namespace NeuroSystem.VirtualMachine.Core
             return metody.FirstOrDefault(m => m.CzyTakieSameMetody(methodReference));
         }
 
-        public static bool CzyTakieSameMetody(this MethodInfo methodInfo, MethodReference methodReference)
+        public static bool CzyTakieSameMetody(this MethodInfo methodInfo, MethodDefinition methodReference)
         {
             //czy metody generyczne
             if (methodInfo.IsGenericMethod != methodReference.HasGenericParameters)
@@ -194,7 +215,16 @@ namespace NeuroSystem.VirtualMachine.Core
 
 
             //Czy takie same typy zwraca
-            if (methodInfo.ReturnType.IsGenericType == methodReference.ReturnType.IsGenericInstance)
+            if (methodInfo.ReturnType.IsGenericParameter == true &&
+                methodReference.ReturnType.IsGenericParameter == true)
+            {
+                //zwracany jest prametr generyczny np. T, TSource...
+                //porównuję nazwy
+                if (methodInfo.ReturnType.Name != methodReference.ReturnType.Name)
+                {
+                    return false;
+                }
+            } else if (methodInfo.ReturnType.IsGenericType == methodReference.ReturnType.IsGenericInstance)
             {
                 if (methodInfo.ReturnType.IsGenericType == false &&
                     methodReference.ReturnType.IsGenericInstance == false)
