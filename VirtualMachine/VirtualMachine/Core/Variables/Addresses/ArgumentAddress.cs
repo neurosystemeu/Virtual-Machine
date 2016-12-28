@@ -9,8 +9,8 @@ namespace NeuroSystem.VirtualMachine.Instrukcje.Klasy
 {
     public class ArgumentAddress : ObjectAddressWraper
     {
-        public int Indeks { get; internal set; }
-        public MethodData LokalneArgumenty { get; internal set; }
+        public int Indeks { get; set; }
+        public MethodData LokalneArgumenty { get; set; }
 
         public override object GetValue()
         {

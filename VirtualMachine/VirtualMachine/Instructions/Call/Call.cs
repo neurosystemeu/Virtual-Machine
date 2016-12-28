@@ -123,8 +123,20 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
             var typ = instance.GetType();
 
             var m2 = typ.GetProperty(methodDefinition.Name.Replace("set_", ""));
+            if (m2.PropertyType == typeof(bool))
+            { //bool czasem jest łączony z int
+                if (dane is int)
+                {
+                    var daneInt = (int) dane;
+                    m2.SetValue(instance, (daneInt != 0));
+                }
+            }
+            else
+            {
+                m2.SetValue(instance, dane);
+            }
 
-            m2.SetValue(instance, dane);
+            
             WykonajNastepnaInstrukcje();
         }
 

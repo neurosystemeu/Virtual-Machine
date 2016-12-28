@@ -4,8 +4,8 @@ namespace NeuroSystem.VirtualMachine.Instrukcje.Klasy
 {
     public class LocalVariableAddress : ObjectAddressWraper
     {
-        public int Indeks { get; internal set; }
-        public MethodData LokalneZmienne { get; internal set; }
+        public int Indeks { get; set; }
+        public MethodData LokalneZmienne { get; set; }
 
         public override object GetValue()
         {

@@ -8,11 +8,16 @@ namespace NeuroSystem.VirtualMachine.Core.Variables.Value
 {
     public class ObjectWraper : ObjectWraperBase
     {
-        public object Warosc;
+        public object Warosc { get; set; }
 
         public ObjectWraper(object o)
         {
             Warosc = o;
+        }
+
+        public ObjectWraper()
+        {
+            
         }
 
         public override object GetValue()
