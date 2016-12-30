@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil.Cil;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Conditional
 {
     /// <summary>
     /// Unconditionally transfers control to a target instruction.

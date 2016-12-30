@@ -1,12 +1,6 @@
-﻿using NeuroSystem.VirtualMachine.Instrukcje;
-using Mono.Cecil.Cil;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Mono.Cecil.Cil;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Conditional
 {
     //Compares two values. If they are equal, the integer value 1 (int32) is pushed onto the evaluation stack; otherwise 0 (int32) is pushed onto the evaluation stack.
     class Ceq : InstructionBase

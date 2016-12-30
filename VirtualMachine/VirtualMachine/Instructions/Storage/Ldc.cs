@@ -1,11 +1,6 @@
 ﻿using Mono.Cecil.Cil;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Storage
 {
     /// <summary>
     /// Pushes a supplied value of type int32 onto the evaluation stack as an int32.

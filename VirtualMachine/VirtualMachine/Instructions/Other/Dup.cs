@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NeuroSystem.VirtualMachine.Instrukcje;
-using NeuroSystem.VirtualMachine.Klasy;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Other
 {
     //Copies the current topmost value on the evaluation stack, and then pushes the copy onto the evaluation stack.
     public class Dup : InstructionBase

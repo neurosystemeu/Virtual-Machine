@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NeuroSystem.UnitTestVirtualMachine.Klasy.Biznesowe;
 
 namespace NeuroSystem.UnitTestVirtualMachine.Klasy.Repozytoria
 {

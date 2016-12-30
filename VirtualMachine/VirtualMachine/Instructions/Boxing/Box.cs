@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil.Cil;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Boxing
 {
     /// <summary>
     /// Converts a value type to an object reference (type O).

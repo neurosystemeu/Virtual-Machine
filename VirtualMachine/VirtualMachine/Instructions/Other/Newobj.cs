@@ -1,14 +1,10 @@
-﻿using Mono.Cecil;
-using Mono.Cecil.Cil;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Mono.Cecil;
+using Mono.Cecil.Cil;
 using NeuroSystem.VirtualMachine.Core;
-using NeuroSystem.VirtualMachine.Klasy;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Other
 {
     public class Newobj : InstructionBase
     {

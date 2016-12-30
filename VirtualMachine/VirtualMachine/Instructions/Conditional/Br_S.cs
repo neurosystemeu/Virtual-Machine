@@ -1,11 +1,6 @@
 ﻿using Mono.Cecil.Cil;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Conditional
 {
     //Unconditionally transfers control to a target instruction (short form).
     public class Br_S : InstructionBase

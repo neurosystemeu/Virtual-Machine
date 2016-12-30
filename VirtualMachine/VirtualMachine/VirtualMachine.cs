@@ -7,13 +7,13 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using NeuroSystem.VirtualMachine;
+using NeuroSystem.VirtualMachine.Core;
 using NeuroSystem.VirtualMachine.Core.Components;
-using NeuroSystem.VirtualMachine.Instrukcje;
-using NeuroSystem.VirtualMachine.Klasy;
+using NeuroSystem.VirtualMachine.Instructions;
+using NeuroSystem.VirtualMachine.Instructions.Call;
 using Polenter.Serialization;
 
-namespace NS
+namespace NeuroSystem.VirtualMachine
 {
     public static class Debug
     {
@@ -25,16 +25,13 @@ namespace NS
         public static string LocalVariables => VM?.AktualnaMetoda?.LocalVariables?.ToString();
         public static int StopIterationNumber =-1;
     }
-}
 
-namespace NeuroSystem.VirtualMachine
-{
     public class VirtualMachine
     {
         public VirtualMachine()
         {
             Stos = new Stack();
-            NS.Debug.VM = this; // do debugowania
+            Debug.VM = this; // do debugowania
         }
 
         #region start
@@ -97,13 +94,13 @@ namespace NeuroSystem.VirtualMachine
 
         public void Execute()
         {
-            NS.Debug.VM = this; // do debugowania 
+            Debug.VM = this; // do debugowania 
 
             while (CzyWykonywacInstrukcje)
             {
                 try
                 {
-                    if (NS.Debug.StopIterationNumber == NumerIteracji)
+                    if (Debug.StopIterationNumber == NumerIteracji)
                     {
                     }
                     aktualnaInstrukcja = PobierzAktualnaInstrukcje();
@@ -202,7 +199,7 @@ namespace NeuroSystem.VirtualMachine
             get
             {
                 var s = NumerIteracji.ToString() + ": " +
-                    AktualnaMetoda.NazwaMetody + " ";
+                        AktualnaMetoda.NazwaMetody + " ";
                 if (aktualnaInstrukcja != null)
                 {
                     s += String.Format("0x{0:X}", aktualnaInstrukcja.Offset);

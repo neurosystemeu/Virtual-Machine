@@ -1,7 +1,6 @@
-﻿using System;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Storage
 {
     /// <summary>
     /// Finds the value of a field in the object whose reference is currently on the evaluation stack.

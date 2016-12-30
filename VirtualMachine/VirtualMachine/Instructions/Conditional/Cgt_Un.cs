@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil.Cil;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Conditional
 {
     /// <summary>
     /// Compares two unsigned or unordered values. 

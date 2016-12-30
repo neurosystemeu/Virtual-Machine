@@ -1,14 +1,10 @@
-﻿using NeuroSystem.VirtualMachine.Instrukcje;
-using NeuroSystem.VirtualMachine.Klasy;
-using Mono.Cecil;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NeuroSystem.VirtualMachine.Core;
+using Mono.Cecil;
+using NeuroSystem.VirtualMachine.Core.Components;
+using NeuroSystem.VirtualMachine.Instructions;
 
-namespace NeuroSystem.VirtualMachine
+namespace NeuroSystem.VirtualMachine.Core
 {
     
     /// <summary>

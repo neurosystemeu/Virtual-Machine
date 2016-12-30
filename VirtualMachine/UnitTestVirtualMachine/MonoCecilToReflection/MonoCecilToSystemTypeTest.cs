@@ -8,7 +8,6 @@ using NeuroSystem.UnitTestVirtualMachine.Klasy.Biznesowe;
 using NeuroSystem.UnitTestVirtualMachine.Klasy.Repozytoria;
 using NeuroSystem.UnitTestVirtualMachine.Klasy.Testowe;
 using NeuroSystem.VirtualMachine.Core;
-using NeuroSystem.VirtualMachine.Klasy;
 
 namespace NeuroSystem.UnitTestVirtualMachine.MonoCecilToReflection
 {

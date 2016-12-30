@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NeuroSystem.VirtualMachine.Klasy;
+﻿using NeuroSystem.VirtualMachine.Core.Components;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje.Klasy
+namespace NeuroSystem.VirtualMachine.Core.Variables.Addresses
 {
     public class ArgumentAddress : ObjectAddressWraper
     {

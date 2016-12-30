@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil.Cil;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Storage
 {
     /// <summary>
     /// Załaduj adres argumentu w krótkiej forme na stos.

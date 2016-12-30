@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Mono.Cecil.Cil;
 using Mono.Cecil;
-using NeuroSystem.VirtualMachine.Klasy;
+using Mono.Cecil.Cil;
 using NeuroSystem.VirtualMachine.Core;
 using NeuroSystem.VirtualMachine.Core.Attributes;
-using NeuroSystem.VirtualMachine.Instrukcje.Klasy;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Call
 {
     public class Call : InstructionBase
     {

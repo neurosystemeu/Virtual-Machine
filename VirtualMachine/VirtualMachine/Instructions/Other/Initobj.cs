@@ -1,8 +1,8 @@
 ﻿using System;
 using Mono.Cecil.Cil;
-using NeuroSystem.VirtualMachine.Instrukcje.Klasy;
+using NeuroSystem.VirtualMachine.Core.Variables.Addresses;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Other
 {
     /// <summary>
     /// Initializes each field of the value type at a specified address to a null reference or a 0 of the appropriate primitive type.

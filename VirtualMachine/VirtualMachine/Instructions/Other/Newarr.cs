@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NeuroSystem.VirtualMachine.Instrukcje;
-using NeuroSystem.VirtualMachine.Klasy;
 using Mono.Cecil.Cil;
 using NeuroSystem.VirtualMachine.Core;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Other
 {
     //Pushes an object reference to a new zero-based, one-dimensional array whose elements are of a specific type onto the evaluation stack.
     public class Newarr : InstructionBase

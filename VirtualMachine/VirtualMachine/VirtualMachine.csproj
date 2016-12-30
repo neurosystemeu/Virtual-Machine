@@ -62,15 +62,15 @@
   <ItemGroup>
     <Compile Include="Core\ElementBase.cs" />
     <Compile Include="Core\Variables\Addresses\ArgumentAddress.cs" />
-    <Compile Include="Core\Variables\Addresses\VariableAddressBase.cs" />
     <Compile Include="Core\Variables\Addresses\LocalVariableAddress.cs" />
     <Compile Include="Core\Components\MethodData.cs" />
     <Compile Include="Core\EnumStatusWirtualnejMaszyny.cs" />
     <Compile Include="Core\Attributes\InterpretAttribute.cs" />
     <Compile Include="Core\MonoTypeExtension.cs" />
     <Compile Include="Core\Components\Stack.cs" />
+    <Compile Include="Core\Variables\Addresses\VariableAddressBase.cs" />
+    <Compile Include="Core\Variables\ObjectWraperBase.cs" />
     <Compile Include="Core\Variables\Value\VariableValuable.cs" />
-    <Compile Include="Core\Variables\VariableBase.cs" />
     <Compile Include="Core\WykonywanaMetoda.cs" />
     <Compile Include="Instructions\Arithmetic\Add.cs" />
     <Compile Include="Instructions\Boxing\Box.cs" />

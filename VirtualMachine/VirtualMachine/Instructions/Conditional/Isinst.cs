@@ -1,14 +1,7 @@
-﻿using NeuroSystem.VirtualMachine.Instrukcje;
-using NeuroSystem.VirtualMachine.Klasy;
-using Mono.Cecil.Cil;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Mono.Cecil.Cil;
 using NeuroSystem.VirtualMachine.Core;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Conditional
 {
     public class Isinst : InstructionBase
     {

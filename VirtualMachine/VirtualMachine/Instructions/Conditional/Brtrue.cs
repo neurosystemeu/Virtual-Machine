@@ -1,11 +1,6 @@
 ﻿using Mono.Cecil.Cil;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Conditional
 {
     //Transfers control to a target instruction (short form) if value is true, not null, or non-zero.
     public class Brtrue : InstructionBase

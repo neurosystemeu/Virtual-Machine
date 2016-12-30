@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NeuroSystem.UnitTestVirtualMachine.Procesy.Hibernowane;
-using NeuroSystem.VirtualMachine.Klasy;
+using NeuroSystem.VirtualMachine.Core;
 
 namespace NeuroSystem.UnitTestVirtualMachine.Procesy
 {

@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Mono.Cecil.Cil;
-using NeuroSystem.VirtualMachine;
 using NeuroSystem.VirtualMachine.Core;
 using NeuroSystem.VirtualMachine.Core.Variables;
-using NeuroSystem.VirtualMachine.Core.Variables.Value;
-using NeuroSystem.VirtualMachine.Instrukcje;
-using NeuroSystem.VirtualMachine.Instrukcje.Klasy;
+using NeuroSystem.VirtualMachine.Core.Variables.Addresses;
+using NeuroSystem.VirtualMachine.Instructions.Arithmetic;
+using NeuroSystem.VirtualMachine.Instructions.Boxing;
+using NeuroSystem.VirtualMachine.Instructions.Call;
+using NeuroSystem.VirtualMachine.Instructions.Conditional;
+using NeuroSystem.VirtualMachine.Instructions.Other;
+using NeuroSystem.VirtualMachine.Instructions.Storage;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions
 {
     public class InstructionBase
     {
@@ -177,7 +177,7 @@ namespace NeuroSystem.VirtualMachine.Instrukcje
                 case Code.Starg_S:
                     return new Starg(((Mono.Cecil.ParameterDefinition)instrukcja.Operand).Index, instrukcja);
                 case Code.Call:
-                    return new Call(instrukcja);
+                    return new Call.Call(instrukcja);
                 case Code.Callvirt:
                     return new Callvirt(instrukcja);
                 case Code.Ret:

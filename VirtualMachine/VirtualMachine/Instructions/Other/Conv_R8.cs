@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil.Cil;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Other
 {
     /// <summary>
     /// Converts the value on top of the evaluation stack to float64.

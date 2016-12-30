@@ -1,14 +1,6 @@
-﻿using Mono.Cecil;
-using Mono.Cecil.Cil;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NeuroSystem.VirtualMachine.Core;
-using NeuroSystem.VirtualMachine.Klasy;
+﻿using Mono.Cecil.Cil;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Call
 {
     public class Callvirt : Call
     {

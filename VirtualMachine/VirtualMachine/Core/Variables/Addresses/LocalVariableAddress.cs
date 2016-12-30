@@ -1,6 +1,6 @@
-﻿using NeuroSystem.VirtualMachine.Klasy;
+﻿using NeuroSystem.VirtualMachine.Core.Components;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje.Klasy
+namespace NeuroSystem.VirtualMachine.Core.Variables.Addresses
 {
     public class LocalVariableAddress : ObjectAddressWraper
     {

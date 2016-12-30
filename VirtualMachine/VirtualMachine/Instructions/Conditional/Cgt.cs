@@ -1,11 +1,6 @@
 ﻿using Mono.Cecil.Cil;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Conditional
 {
     ///Compares two values. If the first value is greater than the second, 
     /// the integer value 1 (int32) is pushed onto the evaluation stack; otherwise 0 (int32) is 

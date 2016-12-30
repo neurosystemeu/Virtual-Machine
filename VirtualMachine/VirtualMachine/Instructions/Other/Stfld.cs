@@ -1,7 +1,7 @@
 ﻿using System;
 using Mono.Cecil.Cil;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Other
 {
     /// <summary>
     /// Replaces the value stored in the field of an object reference or pointer with a new value.

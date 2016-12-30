@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NeuroSystem.VirtualMachine.Instrukcje;
-using NeuroSystem.VirtualMachine.Klasy;
-using Mono.Cecil.Cil;
+﻿using Mono.Cecil.Cil;
 using NeuroSystem.VirtualMachine.Core;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Other
 {
     /// <summary>
     /// Converts a metadata token to its runtime representation, pushing it onto the evaluation stack.

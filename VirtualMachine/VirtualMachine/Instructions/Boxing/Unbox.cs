@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil.Cil;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Boxing
 {
     /// <summary>
     /// Converts the boxed representation of a value type to its unboxed form.

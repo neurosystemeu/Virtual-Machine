@@ -1,13 +1,9 @@
-﻿using Mono.Cecil.Cil;
-using NeuroSystem.VirtualMachine;
-using NeuroSystem.VirtualMachine.Klasy;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Mono.Cecil.Cil;
+using NeuroSystem.VirtualMachine.Core;
 
-namespace NeuroSystem.VirtualMachine.Instrukcje
+namespace NeuroSystem.VirtualMachine.Instructions.Other
 {
     public class Throw : InstructionBase
     {
