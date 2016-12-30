@@ -93,8 +93,6 @@ namespace NeuroSystem.VirtualMachine
             return (TD)Wynik;
         }
 
-
-
         
 
         public void Execute()
