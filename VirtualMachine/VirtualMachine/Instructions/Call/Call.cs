@@ -60,7 +60,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Call
                         type = methodDef.DeclaringType.GetSystemType();
                     }
                    
-                    var methodInfo = type.GetMethod(methodDef);
+                    var methodInfo = type.GetMethod(methodRef);
                     var ret = methodInfo.Wykonaj(instance, parameters.ToArray());
                     if (methodInfo.ReturnType == typeof(void))
                     {

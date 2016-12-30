@@ -7,13 +7,14 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using NeuroSystem.VirtualMachine;
 using NeuroSystem.VirtualMachine.Core;
 using NeuroSystem.VirtualMachine.Core.Components;
 using NeuroSystem.VirtualMachine.Instructions;
 using NeuroSystem.VirtualMachine.Instructions.Call;
 using Polenter.Serialization;
 
-namespace NeuroSystem.VirtualMachine
+namespace NS
 {
     public static class Debug
     {
@@ -23,15 +24,21 @@ namespace NeuroSystem.VirtualMachine
         public static string Method => VM?.AktualnaMetoda?.ToString();
         public static string LocalArguments => VM?.AktualnaMetoda?.LocalArguments?.ToString();
         public static string LocalVariables => VM?.AktualnaMetoda?.LocalVariables?.ToString();
-        public static int StopIterationNumber =-1;
+        public static int StopIterationNumber = -1;
     }
+
+}
+
+namespace NeuroSystem.VirtualMachine
+{
+    
 
     public class VirtualMachine
     {
         public VirtualMachine()
         {
             Stos = new Stack();
-            Debug.VM = this; // do debugowania
+            NS.Debug.VM = this; // do debugowania
         }
 
         #region start
@@ -94,13 +101,13 @@ namespace NeuroSystem.VirtualMachine
 
         public void Execute()
         {
-            Debug.VM = this; // do debugowania 
+            NS.Debug.VM = this; // do debugowania 
 
             while (CzyWykonywacInstrukcje)
             {
                 try
                 {
-                    if (Debug.StopIterationNumber == NumerIteracji)
+                    if (NS.Debug.StopIterationNumber == NumerIteracji)
                     {
                     }
                     aktualnaInstrukcja = PobierzAktualnaInstrukcje();

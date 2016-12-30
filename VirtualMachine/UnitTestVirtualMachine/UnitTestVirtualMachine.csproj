@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="Generyki\MonoCecilTest\UnitTest1.cs" />
     <Compile Include="Klasy\Biznesowe\ObiektBiznesowy.cs" />
+    <Compile Include="Klasy\Biznesowe\Person.cs" />
     <Compile Include="Klasy\Procesy\Proces.cs" />
     <Compile Include="Klasy\Repozytoria\Repozytorium.cs" />
     <Compile Include="Klasy\Biznesowe\Pracownik.cs" />
@@ -79,6 +80,9 @@
     <Compile Include="Klasy\Testowe\ObiektZMetodami.cs" />
     <Compile Include="MethodInvoker\UnitTest1.cs" />
     <Compile Include="MonoCecilToReflection\MonoCecilToSystemTypeTest.cs" />
+    <Compile Include="Procesy\Fluent\DataFormFactory.cs" />
+    <Compile Include="Procesy\Fluent\FluentUIProcess.cs" />
+    <Compile Include="Procesy\Fluent\FluentUITest.cs" />
     <Compile Include="Procesy\Hibernowane\HibernacjaProces.cs" />
     <Compile Include="Procesy\Hibernowane\ProstaHibernacjaProces.cs" />
     <Compile Include="Procesy\Podstawowy\DodawaniePracownikaProces.cs" />

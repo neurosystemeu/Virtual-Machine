@@ -131,7 +131,7 @@ namespace NeuroSystem.VirtualMachine.Core
                     //generyczną i statyczną
                     var param = parameters[0];
                     var paramType = param.GetType();
-                    if (paramType.IsGenericType)
+                    if (paramType.IsConstructedGenericType == false && methodInfo.IsGenericMethodDefinition == true)
                     {
                         //generyczna z nie rozwiązanym parametrem generycznym
                         var genericType = paramType.GenericTypeArguments;
@@ -143,15 +143,32 @@ namespace NeuroSystem.VirtualMachine.Core
             return ret;
         }
 
-        public static MethodInfo GetMethod(this Type typ, MethodDefinition methodReference)
+        public static MethodInfo GetMethod(this Type typ, MethodReference methodReference)
         {
-            //metody o danej nazwie
-            var metody = typ.GetMethods().Where(m=> m.Name == methodReference.Name);
-
-            return metody.FirstOrDefault(m => m.CzyTakieSameMetody(methodReference));
+            var genericMethod = methodReference as GenericInstanceMethod;
+            if (genericMethod != null)
+            {
+                var methodDefinition = methodReference.Resolve();
+                var metody = typ.GetMethods().Where(m => m.Name == methodDefinition.Name);
+                var methoda= metody.FirstOrDefault(m => m.CzyTakieSameMetody(methodDefinition));
+                if (genericMethod.GenericArguments.Count > 0) //jeśli jest parametr generyczny to zamieniam go z T
+                {
+                    methoda = methoda.MakeGenericMethod(
+                        genericMethod.GenericArguments.Select(s => s.GetSystemType()).ToArray()
+                        );
+                }
+                return methoda;
+            }
+            else
+            {
+                var methodDefinition = methodReference.Resolve();
+                //metody o danej nazwie
+                var metody = typ.GetMethods().Where(m => m.Name == methodDefinition.Name);
+                return metody.FirstOrDefault(m => m.CzyTakieSameMetody(methodDefinition));
+            }
         }
 
-        public static bool CzyTakieSameMetody(this MethodInfo methodInfo, MethodDefinition methodReference)
+        public static bool CzyTakieSameMetody(this MethodInfo methodInfo, MethodReference methodReference)
         {
             //czy metody generyczne
             if (methodInfo.IsGenericMethod != methodReference.HasGenericParameters)

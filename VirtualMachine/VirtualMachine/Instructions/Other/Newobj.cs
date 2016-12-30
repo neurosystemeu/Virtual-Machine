@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using NeuroSystem.VirtualMachine.Core;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Other
 {
+    /// <summary>
+    /// Creates a new object or a new instance of a value type, pushing an object reference (type O) onto the evaluation stack.
+    /// https://msdn.microsoft.com/pl-pl/library/system.reflection.emit.opcodes.newobj(v=vs.110).aspx
+    /// </summary>
     public class Newobj : InstructionBase
     {
         public Newobj(Instruction instrukcja) : base(instrukcja)
@@ -24,10 +29,29 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
                 listaParametrow.Add(PopObject());
             }
 
-            //md.Module.ExportedTypes.FirstOrDefault(t=>t.)
-            var nowyObiekt = Activator.CreateInstance(typ,listaParametrow.ToArray());
-            PushObject(nowyObiekt);
-            WykonajNastepnaInstrukcje();
+            //Obsługa akcji
+            if (typMono.Name.Contains("Action"))
+            {
+                var p0 = listaParametrow[0];
+                var p1 = listaParametrow[1];
+
+                var genericArgument = ((GenericInstanceType) typMono).GenericArguments[0];
+                var gaSystem = genericArgument.GetSystemType();
+
+                var metoda = p0 as MethodDefinition;
+                var nazwaMetody = metoda.Name;
+
+                var actionT = typeof(Action<>).MakeGenericType(gaSystem);
+                var action= Delegate.CreateDelegate(actionT, p1, nazwaMetody);
+                PushObject(action);
+                WykonajNastepnaInstrukcje();
+            }
+            else
+            {
+                var nowyObiekt = Activator.CreateInstance(typ, listaParametrow.ToArray());
+                PushObject(nowyObiekt);
+                WykonajNastepnaInstrukcje();
+            }
         }
     }
 }
