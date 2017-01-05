@@ -29,20 +29,22 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
                 listaParametrow.Add(PopObject());
             }
 
-            //Obsługa akcji
+            listaParametrow.Reverse();
+
+            //Obsługa akcji z dwoma parametrami
             if (typMono.Name.Contains("Action"))
             {
-                var p0 = listaParametrow[0];
-                var p1 = listaParametrow[1];
+                var p_1 = listaParametrow[1];
+                var p_0 = listaParametrow[0];
 
                 var genericArgument = ((GenericInstanceType) typMono).GenericArguments[0];
                 var gaSystem = genericArgument.GetSystemType();
 
-                var metoda = p0 as MethodDefinition;
+                var metoda = p_1 as MethodDefinition;
                 var nazwaMetody = metoda.Name;
 
                 var actionT = typeof(Action<>).MakeGenericType(gaSystem);
-                var action= Delegate.CreateDelegate(actionT, p1, nazwaMetody);
+                var action= Delegate.CreateDelegate(actionT, p_0, nazwaMetody);
                 PushObject(action);
                 WykonajNastepnaInstrukcje();
             }

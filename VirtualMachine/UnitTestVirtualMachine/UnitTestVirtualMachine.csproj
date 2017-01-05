@@ -87,6 +87,8 @@
     <Compile Include="Procesy\Hibernowane\ProstaHibernacjaProces.cs" />
     <Compile Include="Procesy\Podstawowy\DodawaniePracownikaProces.cs" />
     <Compile Include="Procesy\Podstawowy\RepozytoriumTestProces.cs" />
+    <Compile Include="Procesy\Procesy\DwaParametryProces.cs" />
+    <Compile Include="Procesy\Procesy\UnitTest1.cs" />
     <Compile Include="Procesy\UnitTestHibernate.cs" />
     <Compile Include="Procesy\UnitTestProcesy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
