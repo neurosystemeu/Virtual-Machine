@@ -58,7 +58,7 @@ namespace NeuroSystem.VirtualMachine
                 typDef = gen.Resolve();
             }
 
-            var metoda = typDef.Methods.FirstOrDefault(mm => mm.Name == nazwaMetodyStartu);
+            var metoda = typ.GetMethod(nazwaMetodyStartu);//typDef.Methods.FirstOrDefault(mm => mm.Name == nazwaMetodyStartu);
 
 
             var m = new Metoda(metoda);
@@ -183,13 +183,13 @@ namespace NeuroSystem.VirtualMachine
         public void WalidujMetodyObiektu(object instancjaObiektu)
         {
             var typ = instancjaObiektu.GetType();
-            var foldre = typ.Assembly.Location;
-            var module = Mono.Cecil.ModuleDefinition.ReadModule(foldre);
-            var typy = module.GetTypes();
+            //var foldre = typ.Assembly.Location;
+            //var module = Mono.Cecil.ModuleDefinition.ReadModule(foldre);
+            //var typy = module.GetTypes();
 
-            var typDef = typy.First(t => t.FullName == typ.FullName);
-            var metody = typDef.Methods;
-            foreach (var metoda in metody)
+            //var typDef = typy.First(t => t.FullName == typ.FullName);
+            //var metody = typDef.Methods;
+            foreach (var metoda in typ.GetMethods())
             {
                 var m = new Metoda(metoda);
                 var i = m.PobierzInstrukcjeMetody(); //pobierma instrukcje metody - jeśli brakuje jakiejś instrukcji rzuca wyjątek

@@ -1,4 +1,4 @@
-﻿using Mono.Cecil.Cil;
+﻿using Mono.Reflection;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Storage
 {
@@ -7,23 +7,39 @@ namespace NeuroSystem.VirtualMachine.Instructions.Storage
     /// </summary>
     public class Stloc : InstructionBase
     {
-        public Stloc(int indeks, Instruction instrukcja) : base(instrukcja)
+        public Stloc(Instruction instrukcja) : base(instrukcja)
         {
-            Indeks = indeks;
+            
         }
 
-        public int Indeks { get; set; }
-
+        public int Indeks
+        {
+            get
+            {
+                var str = instrukcja.OpCode.Name.Split('.')[1];
+                return int.Parse(str);
+            }
+        }
+       
         public override void Wykonaj()
         {
             var o = PopObject();
-            ZapiszLokalnaZmienna(o, Indeks);
+
+            var a = instrukcja.Operand as System.Reflection.LocalVariableInfo;
+            if (a != null)
+            {
+                ZapiszLokalnaZmienna(o, a.LocalIndex);
+            }
+            else
+            {
+                ZapiszLokalnaZmienna(o, Indeks);
+            }
             WykonajNastepnaInstrukcje();
         }
 
         public override string ToString()
         {
-            return base.ToString() + " " + Indeks;
+            return base.ToString();// + " " + Indeks;
         }
     }
 }

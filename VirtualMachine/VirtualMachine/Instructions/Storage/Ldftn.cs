@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mono.Cecil.Cil;
+using Mono.Reflection;
 using NeuroSystem.VirtualMachine.Core;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Storage

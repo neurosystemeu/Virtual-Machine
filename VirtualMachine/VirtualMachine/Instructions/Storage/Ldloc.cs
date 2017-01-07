@@ -1,4 +1,4 @@
-﻿using Mono.Cecil.Cil;
+﻿using Mono.Reflection;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Storage
 {
@@ -7,17 +7,35 @@ namespace NeuroSystem.VirtualMachine.Instructions.Storage
     /// </summary>
     public class Ldloc : InstructionBase
     {
-        public Ldloc(int indeks, Instruction instrukcja) : base(instrukcja)
+        public Ldloc(Instruction instrukcja) : base(instrukcja)
         {
-            Indeks = indeks;
         }
 
-        public int Indeks { get; set; }
+        public int Indeks
+        {
+            get
+            {
+                var str = instrukcja.OpCode.Name.Split('.')[1];
+                return int.Parse(str);
+            }
+        }
 
         public override void Wykonaj()
         {
-            var o = PobierzLokalnaZmienna(Indeks);
-            PushObject(o);
+
+            var a = instrukcja.Operand as System.Reflection.LocalVariableInfo;
+            if (a != null)
+            {
+                var o = PobierzLokalnaZmienna(a.LocalIndex);
+                PushObject(o);
+            }
+            else
+            {
+                var o = PobierzLokalnaZmienna(Indeks);
+                PushObject(o);
+            }
+
+            
             WykonajNastepnaInstrukcje();
         }
 

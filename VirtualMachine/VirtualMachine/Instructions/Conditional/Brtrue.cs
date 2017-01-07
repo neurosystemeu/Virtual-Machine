@@ -1,4 +1,4 @@
-﻿using Mono.Cecil.Cil;
+﻿using Mono.Reflection;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Conditional
 {
@@ -29,7 +29,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Conditional
                 wynik = true;
             }
 
-            var op = instrukcja.Operand as Mono.Cecil.Cil.Instruction;
+            var op = instrukcja.Operand as Instruction;
             var nextOffset = op.Offset;
             if (wynik)
             {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Mono.Cecil.Cil;
+using Mono.Reflection;
 using NeuroSystem.VirtualMachine.Core;
 using NeuroSystem.VirtualMachine.Core.Variables;
 using NeuroSystem.VirtualMachine.Core.Variables.Addresses;
@@ -10,6 +10,7 @@ using NeuroSystem.VirtualMachine.Instructions.Call;
 using NeuroSystem.VirtualMachine.Instructions.Conditional;
 using NeuroSystem.VirtualMachine.Instructions.Other;
 using NeuroSystem.VirtualMachine.Instructions.Storage;
+using System.Reflection.Emit;
 
 namespace NeuroSystem.VirtualMachine.Instructions
 {
@@ -26,7 +27,7 @@ namespace NeuroSystem.VirtualMachine.Instructions
 
         public Instruction instrukcja;
         public int Offset { get; set; }
-        public Code KodInstrukcji { get; set; }
+        public System.Reflection.Emit.OpCode KodInstrukcji { get; set; }
         public VirtualMachine WirtualnaMaszyna { get; set; }
 
         public virtual void Wykonaj()
@@ -160,145 +161,146 @@ namespace NeuroSystem.VirtualMachine.Instructions
             {
 
 
-                switch (instrukcja.OpCode.Code)
+                switch (instrukcja.OpCode.Name)
                 {
-                    case Code.Nop:
+                    case "nop":
                         return new Nop(instrukcja);
-                    case Code.Ldarg_0:
+                    case "ldarg.0":
                         return new Ldarg(0, instrukcja);
-                    case Code.Ldarg_1:
+                    case "ldarg.1":
                         return new Ldarg(1, instrukcja);
-                    case Code.Ldarg_2:
+                    case "ldarg.2":
                         return new Ldarg(2, instrukcja);
-                    case Code.Ldarg_3:
+                    case "ldarg.3":
                         return new Ldarg(3, instrukcja);
-                    case Code.Ldarga_S:
+                    case "ldarga.s":
                         return new Ldarga(instrukcja);
-                    case Code.Starg_S:
+                    case "starg.s":
                         return new Starg(((Mono.Cecil.ParameterDefinition)instrukcja.Operand).Index, instrukcja);
-                    case Code.Call:
+                    case "call":
                         return new Call.Call(instrukcja);
-                    case Code.Callvirt:
+                    case "callvirt":
                         return new Callvirt(instrukcja);
-                    case Code.Ret:
+                    case "ret":
                         return new Ret(instrukcja);
-                    case Code.Add:
+                    case "add":
                         return new Add(instrukcja);
-                    case Code.Stloc_S:
-                        return new Stloc(((VariableDefinition)instrukcja.Operand).Index, instrukcja);
-                    case Code.Stloc_0:
-                        return new Stloc(0, instrukcja);
-                    case Code.Stloc_1:
-                        return new Stloc(1, instrukcja);
-                    case Code.Stloc_2:
-                        return new Stloc(2, instrukcja);
-                    case Code.Stloc_3:
-                        return new Stloc(3, instrukcja);
-                    case Code.Ldloc_S:
-                        return new Ldloc(((VariableDefinition)instrukcja.Operand).Index, instrukcja);
-                    case Code.Ldloc_0:
-                        return new Ldloc(0, instrukcja);
-                    case Code.Ldloc_1:
-                        return new Ldloc(1, instrukcja);
-                    case Code.Ldloc_2:
-                        return new Ldloc(2, instrukcja);
-                    case Code.Ldloc_3:
-                        return new Ldloc(3, instrukcja);
-                    case Code.Br_S:
+                    case "stloc.s":
+                        return new Stloc(instrukcja);
+                    case "stloc.0":
+                        return new Stloc(instrukcja);
+                    case "stloc.1":
+                        return new Stloc(instrukcja);
+                    case "stloc.2":
+                        return new Stloc(instrukcja);
+                    case "stloc.3":
+                        return new Stloc(instrukcja);
+                    case "ldloc.s":
+                        return new Ldloc(instrukcja);
+                    case "ldloc.0":
+                        return new Ldloc( instrukcja);
+                    case "ldloc.1":
+                        return new Ldloc(instrukcja);
+                    case "ldloc.2":
+                        return new Ldloc(instrukcja);
+                    case "ldloc.3":
+                        return new Ldloc(instrukcja);
+                    case "br.s":
                         return new Br_S(instrukcja);
-                    case Code.Sub:
+                    case "sub":
                         return new Sub(instrukcja);
-                    case Code.Ldstr:
+                    case "ldstr":
                         return new Ldstr(instrukcja);
-                    case Code.Newobj:
+                    case "newobj":
                         return new Newobj(instrukcja);
-                    case Code.Throw:
+                    case "throw":
                         return new Throw(instrukcja);
-                    case Code.Leave_S:
+                    case "leave.s":
                         return new Leave_S(instrukcja);
-                    case Code.Endfinally:
+                    case "endfinally":
                         return new Endfinally(instrukcja);
-                    case Code.Pop:
+                    case "pop":
                         return new Pop(instrukcja);
-                    case Code.Ldc_I4_M1:
+                    case "ldc.i4.m1":
                         return new Ldc(-1, instrukcja);
-                    case Code.Ldc_I4_0:
+                    case "ldc.i4.0":
                         return new Ldc(0, instrukcja);
-                    case Code.Ldc_I4_1:
+                    case "ldc.i4.1":
                         return new Ldc(1, instrukcja);
-                    case Code.Ldc_I4_2:
+                    case "ldc.i4.2":
                         return new Ldc(2, instrukcja);
-                    case Code.Ldc_I4_3:
+                    case "ldc.i4.3":
                         return new Ldc(3, instrukcja);
-                    case Code.Ldc_I4_4:
+                    case "ldc.i4.4":
                         return new Ldc(4, instrukcja);
-                    case Code.Ldc_I4_5:
+                    case "ldc.i4.5":
                         return new Ldc(5, instrukcja);
-                    case Code.Ldc_I4_6:
+                    case "ldc.i4.6":
                         return new Ldc(6, instrukcja);
-                    case Code.Ldc_I4_S:
+                    case "ldc.i4.s":
                         return new Ldc((sbyte)instrukcja.Operand, instrukcja);
-                    case Code.Ldc_I4:
+                    case "ldc.i4":
                         return new Ldc((Int32)instrukcja.Operand, instrukcja);
-                    case Code.Ldc_R8:
+                    case "ldc.r8":
                         return new Ldc(instrukcja.Operand, instrukcja);
-                    case Code.Ldnull:
+                    case "ldnull":
                         return new Ldc(null, instrukcja);
-                    case Code.Ldloca_S:
+                    case "ldloca.s":
                         return new Ldloca(instrukcja.Operand, instrukcja);
-                    case Code.Cgt:
+                    case "cgt":
                         return new Cgt(instrukcja);
-                    case Code.Clt:
+                    case "clt":
                         return new Clt(instrukcja);
-                    case Code.Ceq:
+                    case "ceq":
                         return new Ceq(instrukcja);
-                    case Code.Brfalse:
+                    case "brfalse":
                         return new Brfalse(instrukcja);
-                    case Code.Brfalse_S:
+                    case "brfalse.s":
                         return new Brfalse(instrukcja);
-                    case Code.Brtrue_S:
+                    case "brtrue.s":
                         return new Brtrue(instrukcja);
-                    case Code.Constrained:
+                    case "constrained.":
+                    case "constrained":
                         return new Constrained(instrukcja);
-                    case Code.Castclass:
+                    case "castclass":
                         return new Castclass(instrukcja);
-                    case Code.Isinst:
+                    case "isinst":
                         return new Isinst(instrukcja);
-                    case Code.Ldtoken:
+                    case "ldtoken":
                         return new Ldtoken(instrukcja);
-                    case Code.Newarr:
+                    case "newarr":
                         return new Newarr(instrukcja);
-                    case Code.Dup:
+                    case "dup":
                         return new Dup(instrukcja);
-                    case Code.Stelem_Ref:
+                    case "stelem.ref":
                         return new Stelem_Ref(instrukcja);
-                    case Code.Ldfld:
+                    case "ldfld":
                         return new Ldfld(instrukcja);
-                    case Code.Stfld:
+                    case "stfld":
                         return new Stfld(instrukcja);
-                    case Code.Cgt_Un:
+                    case "cgt.un":
                         return new Cgt_Un(instrukcja);
-                    case Code.Conv_R8:
+                    case "conv.r8":
                         return new Conv_R8(instrukcja);
-                    case Code.Unbox_Any:
+                    case "unbox.any":
                         return new Unbox_Any(instrukcja);
-                    case Code.Br:
+                    case "br":
                         return new Br(instrukcja);
-                    case Code.Initobj:
+                    case "initobj":
                         return new Initobj(instrukcja);
-                    case Code.Box:
+                    case "box":
                         return new Box(instrukcja);
-                    case Code.Unbox:
+                    case "unbox":
                         return new Unbox(instrukcja);
-                    case Code.Ldsfld:
+                    case "ldsfld":
                         return new Ldsfld(instrukcja);
-                    case Code.Ldftn:
+                    case "ldftn":
                         return new Ldftn(instrukcja);
-                    case Code.Stsfld:
+                    case "stsfld":
                         return new Stsfld(instrukcja);
                 }
 
-                throw new Exception("Brak instrukcji " + instrukcja.OpCode.Code + " " + instrukcja.ToString());
+                throw new Exception("Brak instrukcji " + instrukcja.OpCode.Name + " " + instrukcja.ToString());
             }
             catch (Exception ex)
             {

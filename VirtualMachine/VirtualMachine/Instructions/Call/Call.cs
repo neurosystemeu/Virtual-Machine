@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
+using Mono.Reflection;
 using NeuroSystem.VirtualMachine.Core;
 using NeuroSystem.VirtualMachine.Core.Attributes;
 
@@ -16,53 +16,53 @@ namespace NeuroSystem.VirtualMachine.Instructions.Call
 
         public override void Wykonaj()
         {
-            var methodRef = instrukcja.Operand as MethodReference;
-            var methodDef = methodRef.Resolve();
+            var method = instrukcja.Operand as System.Reflection.MethodInfo;
+            //var methodDef = methodRef.Resolve();
             var parameters = new List<object>();
             object instance = null;
 
-            if (methodRef.FullName.Equals("System.Void NeuroSystem.VirtualMachine.VirtualMachine::Hibernate()"))
+            if (method.Name.Equals("Hibernate"))
             {
                 //wywołał metodę do hibernacji wirtualnej maszyny
                 WirtualnaMaszyna.HibernateVirtualMachine();
                 return;
             }
-
-            foreach (var paramDef in methodRef.Parameters)
+            
+            foreach (var paramDef in method.GetParameters())
             {
                 parameters.Add(PopObject());
             }
-            if (methodRef.HasThis)
+            if (method.IsStatic == false)
             {
                 instance = PopObject();
             }
 
             parameters.Reverse();
 
-            if (methodDef.IsSetter)
-            {
-                setter(methodDef, instance, parameters);
-            }
-            else if (methodDef.IsGetter)
-            {
-                getter(methodRef, instance, parameters);
-            }
-            else
+            //if (method.IsSetter)
+            //{
+            //    setter(methodDef, instance, parameters);
+            //}
+            //else if (methodDef.IsGetter)
+            //{
+            //    getter(methodRef, instance, parameters);
+            //}
+            //else
             {
                 //Wykonywanie
-                if (CzyWykonacCzyInterpretowac(methodDef) == true)
+                //if (CzyWykonacCzyInterpretowac(methodDef) == true)
                 {
                     //wykonywanie
-                    Type type = instance?.GetType();
-                    if (type == null)
-                    {
-                        //mamy statyczną metodę
-                        type = methodDef.DeclaringType.GetSystemType();
-                    }
+                    //Type type = instance?.GetType();
+                    //if (type == null)
+                    //{
+                    //    //mamy statyczną metodę
+                    //    type = methodDef.DeclaringType.GetSystemType();
+                    //}
                    
-                    var methodInfo = type.GetMethod(methodRef);
-                    var ret = methodInfo.Wykonaj(instance, parameters.ToArray());
-                    if (methodInfo.ReturnType == typeof(void))
+                    //var methodInfo = type.GetMethod(methodRef);
+                    var ret = method.Invoke(instance, parameters.ToArray());
+                    if (method.ReturnType == typeof(void))
                     {
                         //nie zwracam wyniku
                     }
@@ -72,40 +72,40 @@ namespace NeuroSystem.VirtualMachine.Instructions.Call
                     }
                     WykonajNastepnaInstrukcje();
                 }
-                else
-                {
-                    //interpretowanie
+                //else
+                //{
+                //    //interpretowanie
 
-                    var nazwaMetodyBazowej = methodDef.Name;
-                    var typDef = instance.GetType().GetTypeDefinition();
-                    var staraMetoda = WirtualnaMaszyna.AktualnaMetoda;
+                //    var nazwaMetodyBazowej = methodDef.Name;
+                //    var typDef = instance.GetType().GetTypeDefinition();
+                //    var staraMetoda = WirtualnaMaszyna.AktualnaMetoda;
 
-                    var m = new Metoda();
-                    m.NazwaTypu = methodDef.DeclaringType.FullName;
-                    m.NazwaMetody = nazwaMetodyBazowej; //to będzie już uruchomienie na właściwym obiekcie
-                    m.AssemblyName = methodDef.Module.FullyQualifiedName;
-                    m.NumerWykonywanejInstrukcji = 0;
+                //    var m = new Metoda();
+                //    m.NazwaTypu = methodDef.DeclaringType.FullName;
+                //    m.NazwaMetody = nazwaMetodyBazowej; //to będzie już uruchomienie na właściwym obiekcie
+                //    m.AssemblyName = methodDef.Module.FullyQualifiedName;
+                //    m.NumerWykonywanejInstrukcji = 0;
 
-                    WirtualnaMaszyna.AktualnaMetoda = m;
-                    var iloscArgumentow = methodDef.Parameters.Count;
+                //    WirtualnaMaszyna.AktualnaMetoda = m;
+                //    var iloscArgumentow = methodDef.Parameters.Count;
 
-                    if (methodRef.HasThis)
-                    {
-                        PushObject(instance);
-                        iloscArgumentow += 1;
-                    }
+                //    if (methodRef.HasThis)
+                //    {
+                //        PushObject(instance);
+                //        iloscArgumentow += 1;
+                //    }
 
-                    foreach (var parameter in parameters)
-                    {
-                        PushObject(parameter);
-                    }
+                //    foreach (var parameter in parameters)
+                //    {
+                //        PushObject(parameter);
+                //    }
 
-                    WczytajLokalneArgumenty(iloscArgumentow);
+                //    WczytajLokalneArgumenty(iloscArgumentow);
                     
 
-                    //zapisuję aktualną metodę na stosie
-                    PushObject(staraMetoda);
-                }
+                //    //zapisuję aktualną metodę na stosie
+                //    PushObject(staraMetoda);
+                //}
             }
 
             

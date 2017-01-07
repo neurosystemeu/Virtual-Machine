@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Mono.Cecil;
+using System.Reflection;
+using Mono.Reflection;
 using NeuroSystem.VirtualMachine.Core.Components;
 using NeuroSystem.VirtualMachine.Instructions;
 
@@ -19,8 +20,9 @@ namespace NeuroSystem.VirtualMachine.Core
             instrukcje = null;
         }
 
-        public Metoda(MethodDefinition metoda) : this()
+        public Metoda(MethodInfo metoda) : this()
         {
+            methodInfo = metoda;
             var m = this;
             m.AssemblyName = metoda.Module.FullyQualifiedName;
             m.NazwaTypu = metoda.DeclaringType.FullName;
@@ -29,6 +31,8 @@ namespace NeuroSystem.VirtualMachine.Core
         }
 
         #region Propercje
+
+        private MethodInfo methodInfo;
 
         public string NazwaTypu { get; set; }
         public string NazwaMetody { get; set; }
@@ -68,8 +72,9 @@ namespace NeuroSystem.VirtualMachine.Core
         public List<InstructionBase> PobierzInstrukcjeMetody()
         {
             var metoda = PobierzOpisMetody();
-            var il = metoda.Body.GetILProcessor();
-            var instrukcje = il.Body.Instructions.Select(i => InstructionBase.UtworzInstrukcje(i));
+            //metoda
+            var il = methodInfo.GetInstructions();
+            var instrukcje = il.Select(i => InstructionBase.UtworzInstrukcje(i));
             return instrukcje.ToList();
         }
 
@@ -89,38 +94,39 @@ namespace NeuroSystem.VirtualMachine.Core
             return Instrukcje.IndexOf(inst);
         }
 
-        public MethodDefinition PobierzOpisMetody()
+        public MethodInfo PobierzOpisMetody()
         {
-            var module = ModuleDefinition.ReadModule(this.AssemblyName);
-            var typDef = module.Types.First(t => t.FullName == NazwaTypu);
-            var metoda = typDef.Methods.FirstOrDefault(mm => mm.Name == NazwaMetody);
-            return metoda;
+            //var module = ModuleDefinition.ReadModule(this.AssemblyName);
+            //var typDef = module.Types.First(t => t.FullName == NazwaTypu);
+            //var metoda = typDef.Methods.FirstOrDefault(mm => mm.Name == NazwaMetody);
+            //return metoda;
+            return methodInfo;
         }
 
-        public List<Mono.Cecil.Cil.ExceptionHandler> PobierzBlokiObslugiWyjatkow()
-        {
-            var lista = new List<Mono.Cecil.Cil.ExceptionHandler>();
-            var metoda = PobierzOpisMetody();
-            int offset = OffsetWykonywanejInstrukcji;
+        //public List<ExceptionHandler> PobierzBlokiObslugiWyjatkow()
+        //{
+        //    var lista = new List<ExceptionHandler>();
+        //    var metoda = PobierzOpisMetody().GetMethodDefinition;
+        //    int offset = OffsetWykonywanejInstrukcji;
             
-            foreach (var item in metoda.Body.ExceptionHandlers)
-            {
-                if(item.TryStart.Offset < offset && item.TryEnd.Offset > offset)
-                {
-                    lista.Add(item);
-                }
-            }
+        //    foreach (var item in metoda.Body.ExceptionHandlers)
+        //    {
+        //        if(item.TryStart.Offset < offset && item.TryEnd.Offset > offset)
+        //        {
+        //            lista.Add(item);
+        //        }
+        //    }
 
-            return lista;
-        }
+        //    return lista;
+        //}
 
         
 
         public bool CzyObslugujeWyjatki()
         {
             var metoda = PobierzOpisMetody();
-            return metoda.Body.ExceptionHandlers.Count > 0;
-
+            //return metoda.Body.ExceptionHandlers.Count > 0;
+            return false;
         }
 
         public override string ToString()

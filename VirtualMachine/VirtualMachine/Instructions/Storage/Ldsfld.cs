@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mono.Cecil.Cil;
+using Mono.Reflection;
 using NeuroSystem.VirtualMachine.Core;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Storage
@@ -21,8 +21,8 @@ namespace NeuroSystem.VirtualMachine.Instructions.Storage
         public override void Wykonaj()
         {
             //pobieram statyczną zmienną
-            var fieldDefinition = instrukcja.Operand as Mono.Cecil.FieldDefinition;
-            var typ = fieldDefinition.DeclaringType.GetSystemType();
+            var fieldDefinition = instrukcja.Operand as System.Reflection.FieldInfo;
+            var typ = fieldDefinition.DeclaringType;//.GetSystemType();
             var field = typ.GetField(fieldDefinition.Name);
             var val = field.GetValue(null);
 

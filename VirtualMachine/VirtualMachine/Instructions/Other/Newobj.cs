@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
+using Mono.Reflection;
 using NeuroSystem.VirtualMachine.Core;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Other
@@ -19,10 +20,10 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
 
         public override void Wykonaj()
         {
-            var md = instrukcja.Operand as MethodReference;
+            var md = instrukcja.Operand as System.Reflection.MethodBase;
             var typMono = md.DeclaringType;
-            var typ = typMono.GetSystemType();
-            var iloscParametrow = md.Parameters.Count;
+            var typ = md.DeclaringType;//typMono.GetSystemType();
+            var iloscParametrow = md.GetParameters().Length;
             var listaParametrow = new List<Object>();
             for (int i = 0; i < iloscParametrow; i++)
             {
@@ -32,26 +33,48 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
             listaParametrow.Reverse();
 
             //Obsługa akcji z dwoma parametrami
-            if (typMono.Name.Contains("Action"))
+            //if (typMono.Name.Contains("Action"))
+            //{
+            //    var p_1 = listaParametrow[1];
+            //    var p_0 = listaParametrow[0];
+
+            //    var genericArgument = ((GenericInstanceType) typMono).GenericArguments[0];
+            //    var gaSystem = genericArgument.GetSystemType();
+
+            //    var metoda = p_1 as MethodDefinition;
+            //    var nazwaMetody = metoda.Name;
+
+            //    var actionT = typeof(Action<>).MakeGenericType(gaSystem);
+            //    var action= Delegate.CreateDelegate(actionT, p_0, nazwaMetody);
+            //    PushObject(action);
+            //    WykonajNastepnaInstrukcje();
+            //}
+            //else
             {
-                var p_1 = listaParametrow[1];
-                var p_0 = listaParametrow[0];
-
-                var genericArgument = ((GenericInstanceType) typMono).GenericArguments[0];
-                var gaSystem = genericArgument.GetSystemType();
-
-                var metoda = p_1 as MethodDefinition;
-                var nazwaMetody = metoda.Name;
-
-                var actionT = typeof(Action<>).MakeGenericType(gaSystem);
-                var action= Delegate.CreateDelegate(actionT, p_0, nazwaMetody);
-                PushObject(action);
-                WykonajNastepnaInstrukcje();
-            }
-            else
-            {
-                var nowyObiekt = Activator.CreateInstance(typ, listaParametrow.ToArray());
-                PushObject(nowyObiekt);
+                var constructor = md as ConstructorInfo;
+                if (constructor != null)
+                {
+                    if (md.IsStatic)
+                    {
+                        var nowyObiekt = constructor.Invoke(null, listaParametrow.ToArray());
+                        //Activator.CreateInstance(typ, listaParametrow.ToArray());
+                        PushObject(nowyObiekt);
+                    }
+                    else
+                    {
+                        var instancja = listaParametrow.First();
+                        var param = listaParametrow.Skip(1).ToArray();
+                        var nowyObiekt = constructor.Invoke(instancja, param);
+                        //Activator.CreateInstance(typ, listaParametrow.ToArray());
+                        PushObject(nowyObiekt);
+                    }
+                }
+                else
+                {
+                    var nowyObiekt = md.Invoke(null, listaParametrow.ToArray());
+                        //Activator.CreateInstance(typ, listaParametrow.ToArray());
+                    PushObject(nowyObiekt);
+                }
                 WykonajNastepnaInstrukcje();
             }
         }

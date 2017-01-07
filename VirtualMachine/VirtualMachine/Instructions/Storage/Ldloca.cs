@@ -1,4 +1,5 @@
-﻿using Mono.Cecil.Cil;
+﻿using System;
+using Mono.Reflection;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Storage
 {
@@ -14,10 +15,9 @@ namespace NeuroSystem.VirtualMachine.Instructions.Storage
 
         public override void Wykonaj()
         {
-            var vr = Operand as VariableReference;
-            var vd = vr.Resolve();
-
-            var o = PobierzAdresZmiennejLokalnej(vr.Index);
+            var vr = Operand as System.Reflection.LocalVariableInfo;
+            
+            var o = PobierzAdresZmiennejLokalnej(vr.LocalIndex);
             Push(o);
             WykonajNastepnaInstrukcje();
         }

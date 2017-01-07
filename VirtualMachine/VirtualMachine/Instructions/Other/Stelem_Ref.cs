@@ -1,5 +1,5 @@
 ﻿using System;
-using Mono.Cecil.Cil;
+using Mono.Reflection;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Other
 {

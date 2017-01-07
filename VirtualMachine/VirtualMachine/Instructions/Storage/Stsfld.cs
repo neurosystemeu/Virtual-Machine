@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mono.Cecil.Cil;
+using Mono.Reflection;
 using NeuroSystem.VirtualMachine.Core;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Storage
@@ -25,9 +25,10 @@ namespace NeuroSystem.VirtualMachine.Instructions.Storage
 
             //ustawiam statyczną zmienną wartością ze stosu
             var fieldDefinition = instrukcja.Operand as Mono.Cecil.FieldDefinition;
-            var typ = fieldDefinition.DeclaringType.GetSystemType();
-            var field = typ.GetField(fieldDefinition.Name);
-            field.SetValue(null, o);
+            throw new NotImplementedException();
+            //var typ = fieldDefinition.DeclaringType.GetSystemType();
+            //var field = typ.GetField(fieldDefinition.Name);
+            //field.SetValue(null, o);
             
             WykonajNastepnaInstrukcje();
         }

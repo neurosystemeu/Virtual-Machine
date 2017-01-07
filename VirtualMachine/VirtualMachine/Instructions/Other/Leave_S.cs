@@ -1,4 +1,4 @@
-﻿using Mono.Cecil.Cil;
+﻿using Mono.Reflection;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Other
 {
@@ -10,7 +10,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
 
         public override void Wykonaj()
         {
-            var i = instrukcja.Operand as Mono.Cecil.Cil.Instruction;
+            var i = instrukcja.Operand as Instruction;
             var nextOffset = i.Offset;
             WykonajSkok(nextOffset);
         }
