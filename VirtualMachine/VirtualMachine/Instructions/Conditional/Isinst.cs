@@ -12,12 +12,12 @@ namespace NeuroSystem.VirtualMachine.Instructions.Conditional
 
         public override void Wykonaj()
         {
-            throw new NotImplementedException("instrukcja Isinst");
+            
             dynamic b = PopObject();
             if(b != null)
             {
                 var typ = b.GetType();
-                var typOperanda = ((Mono.Cecil.TypeReference)instrukcja.Operand).GetSystemType();
+                var typOperanda = (Type)instrukcja.Operand;
                 if (typOperanda.IsAssignableFrom(typ))
                 {
                     //mamy ten sam typ
