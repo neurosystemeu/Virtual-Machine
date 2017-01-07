@@ -148,23 +148,57 @@ namespace NeuroSystem.VirtualMachine.Core
             var genericMethod = methodReference as GenericInstanceMethod;
             if (genericMethod != null)
             {
+                //mamy generyczną metode (która ma parametr generyczny)
                 var methodDefinition = methodReference.Resolve();
                 var metody = typ.GetMethods().Where(m => m.Name == methodDefinition.Name);
                 var methoda= metody.FirstOrDefault(m => m.CzyTakieSameMetody(methodDefinition));
                 if (genericMethod.GenericArguments.Count > 0) //jeśli jest parametr generyczny to zamieniam go z T
                 {
+                    var genericTypesToResolveMethod = new List<Type>();
+                    //sprawdzam czy metoda jest konkretnego typu czy T i wymaga rozwinięcia
+                    foreach (var genericArgument in genericMethod.GenericArguments)
+                    {
+                        if (genericArgument.IsGenericParameter)
+                        {
+                            genericTypesToResolveMethod.Add(typ.GenericTypeArguments[0]);
+                        }
+                        else
+                        {
+                            genericTypesToResolveMethod.Add( genericArgument.GetSystemType());
+                        }
+                    }
                     methoda = methoda.MakeGenericMethod(
-                        genericMethod.GenericArguments.Select(s => s.GetSystemType()).ToArray()
+                        genericTypesToResolveMethod.ToArray()
                         );
                 }
                 return methoda;
             }
             else
             {
-                var methodDefinition = methodReference.Resolve();
-                //metody o danej nazwie
-                var metody = typ.GetMethods().Where(m => m.Name == methodDefinition.Name);
-                return metody.FirstOrDefault(m => m.CzyTakieSameMetody(methodDefinition));
+                //mamy metodę zwykłą, 
+                //ale może ona zwracać parametry generyczne T
+                if (methodReference.ContainsGenericParameter == false)
+                {
+                    //mamy metodę zwracającą zwykłe typy
+                    var methodDefinition = methodReference.Resolve();
+                    //metody o danej nazwie
+                    var metody = typ.GetMethods().Where(m => m.Name == methodDefinition.Name);
+                    return metody.FirstOrDefault(m => m.CzyTakieSameMetody(methodDefinition));
+                }
+                else
+                {
+                    //metoda zwraca generyka którego trzeba konstruować
+                    var methodDefinition = methodReference.Resolve();
+                    //methodDefinition.ReturnType = typ.GenericTypeArguments[0].GetTypeDefinition();
+                    //metody o danej nazwie
+                    var metody = typ.GetMethods().Where(m => m.Name == methodDefinition.Name).ToList();
+                    var metoda =  metody.FirstOrDefault(m => m.CzyTakieSameMetody(methodDefinition));
+                    if (metoda.IsGenericMethodDefinition && typ.GenericTypeArguments.Length ==1)
+                    {
+                        metoda = metoda.MakeGenericMethod(typ.GenericTypeArguments[0]);
+                    }
+                    return metoda;
+                }
             }
         }
 

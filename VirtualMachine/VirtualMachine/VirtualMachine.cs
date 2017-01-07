@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Mono.Cecil.Rocks;
 using NeuroSystem.VirtualMachine;
 using NeuroSystem.VirtualMachine.Core;
 using NeuroSystem.VirtualMachine.Core.Components;
@@ -50,7 +51,13 @@ namespace NeuroSystem.VirtualMachine
             var foldre = typ.Assembly.Location;
             var module = Mono.Cecil.ModuleDefinition.ReadModule(foldre);
             var typy = module.GetTypes();
-            var typDef = typy.First(t => t.FullName == typ.FullName);
+            var typDef = typy.First(t => t.Name == typ.Name && t.Namespace == typ.Namespace);
+            if (typ.IsGenericType)
+            {
+                var gen = typDef.MakeGenericInstanceType(typ.GetGenericArguments()[0].GetTypeDefinition());
+                typDef = gen.Resolve();
+            }
+
             var metoda = typDef.Methods.FirstOrDefault(mm => mm.Name == nazwaMetodyStartu);
 
 
@@ -109,6 +116,7 @@ namespace NeuroSystem.VirtualMachine
                 {
                     if (NS.Debug.StopIterationNumber == NumerIteracji)
                     {
+                        System.Diagnostics.Debugger.Break();
                     }
                     aktualnaInstrukcja = PobierzAktualnaInstrukcje();
                     aktualnaInstrukcja.Wykonaj();
