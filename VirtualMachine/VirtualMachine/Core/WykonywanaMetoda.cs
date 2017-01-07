@@ -73,7 +73,7 @@ namespace NeuroSystem.VirtualMachine.Core
         {
             var metoda = PobierzOpisMetody();
             //metoda
-            var il = methodInfo.GetInstructions();
+            var il = metoda.GetInstructions();
             var instrukcje = il.Select(i => InstructionBase.UtworzInstrukcje(i));
             return instrukcje.ToList();
         }
@@ -96,11 +96,17 @@ namespace NeuroSystem.VirtualMachine.Core
 
         public MethodInfo PobierzOpisMetody()
         {
-            //var module = ModuleDefinition.ReadModule(this.AssemblyName);
-            //var typDef = module.Types.First(t => t.FullName == NazwaTypu);
-            //var metoda = typDef.Methods.FirstOrDefault(mm => mm.Name == NazwaMetody);
-            //return metoda;
-            return methodInfo;
+            if (methodInfo != null)
+            {
+                return methodInfo;
+            }
+            else
+            {
+                var module = Assembly.LoadFile(this.AssemblyName);
+                var typDef = module.GetTypes().First(t => t.FullName == NazwaTypu);
+                var metoda = typDef.GetMethods().FirstOrDefault(mm => mm.Name == NazwaMetody);
+                return metoda;
+            }
         }
 
         //public List<ExceptionHandler> PobierzBlokiObslugiWyjatkow()

@@ -1,4 +1,5 @@
-﻿using Mono.Reflection;
+﻿using System;
+using Mono.Reflection;
 using NeuroSystem.VirtualMachine.Core;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Conditional
@@ -11,6 +12,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Conditional
 
         public override void Wykonaj()
         {
+            throw new NotImplementedException("instrukcja Isinst");
             dynamic b = PopObject();
             if(b != null)
             {

@@ -33,23 +33,23 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
             listaParametrow.Reverse();
 
             //Obsługa akcji z dwoma parametrami
-            //if (typMono.Name.Contains("Action"))
-            //{
-            //    var p_1 = listaParametrow[1];
-            //    var p_0 = listaParametrow[0];
+            if (typ.Name.Contains("Action"))
+            {
+                var p_1 = listaParametrow[1];
+                var p_0 = listaParametrow[0];
 
-            //    var genericArgument = ((GenericInstanceType) typMono).GenericArguments[0];
-            //    var gaSystem = genericArgument.GetSystemType();
+                var genericArgument = typMono.GetGenericArguments()[0];
+                var gaSystem = genericArgument;
 
-            //    var metoda = p_1 as MethodDefinition;
-            //    var nazwaMetody = metoda.Name;
+                var metoda = p_1 as MethodInfo;
+                var nazwaMetody = metoda.Name;
 
-            //    var actionT = typeof(Action<>).MakeGenericType(gaSystem);
-            //    var action= Delegate.CreateDelegate(actionT, p_0, nazwaMetody);
-            //    PushObject(action);
-            //    WykonajNastepnaInstrukcje();
-            //}
-            //else
+                var actionT = typeof(Action<>).MakeGenericType(gaSystem);
+                var action = Delegate.CreateDelegate(actionT, p_0, nazwaMetody);
+                PushObject(action);
+                WykonajNastepnaInstrukcje();
+            }
+            else
             {
                 var constructor = md as ConstructorInfo;
                 if (constructor != null)
@@ -62,11 +62,17 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
                     }
                     else
                     {
-                        var instancja = listaParametrow.First();
-                        var param = listaParametrow.Skip(1).ToArray();
-                        var nowyObiekt = constructor.Invoke(instancja, param);
-                        //Activator.CreateInstance(typ, listaParametrow.ToArray());
-                        PushObject(nowyObiekt);
+                        if (listaParametrow.Any() == false)
+                        {
+                            //tworze po prostu dany obiekt - danego typu
+                            var nowyObiekt = Activator.CreateInstance(typ, null);
+                            PushObject(nowyObiekt);
+                        }
+                        else
+                        {
+                            var nowyObiekt = Activator.CreateInstance(typ, listaParametrow.ToArray());
+                            PushObject(nowyObiekt);
+                        }
                     }
                 }
                 else

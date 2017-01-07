@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Mono.Reflection;
@@ -24,12 +25,12 @@ namespace NeuroSystem.VirtualMachine.Instructions.Storage
             var o = PopObject();
 
             //ustawiam statyczną zmienną wartością ze stosu
-            var fieldDefinition = instrukcja.Operand as Mono.Cecil.FieldDefinition;
-            throw new NotImplementedException();
+            var fieldDefinition = instrukcja.Operand as FieldInfo;
+
             //var typ = fieldDefinition.DeclaringType.GetSystemType();
-            //var field = typ.GetField(fieldDefinition.Name);
-            //field.SetValue(null, o);
-            
+            // var field = typ.GetField(fieldDefinition.Name);
+            fieldDefinition.SetValue(null, o);
+
             WykonajNastepnaInstrukcje();
         }
     }

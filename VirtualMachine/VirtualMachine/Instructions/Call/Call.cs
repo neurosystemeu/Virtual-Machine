@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Mono.Cecil;
 using Mono.Reflection;
 using NeuroSystem.VirtualMachine.Core;
@@ -20,13 +21,6 @@ namespace NeuroSystem.VirtualMachine.Instructions.Call
             //var methodDef = methodRef.Resolve();
             var parameters = new List<object>();
             object instance = null;
-
-            if (method.Name.Equals("Hibernate"))
-            {
-                //wywołał metodę do hibernacji wirtualnej maszyny
-                WirtualnaMaszyna.HibernateVirtualMachine();
-                return;
-            }
             
             foreach (var paramDef in method.GetParameters())
             {
@@ -39,6 +33,13 @@ namespace NeuroSystem.VirtualMachine.Instructions.Call
 
             parameters.Reverse();
 
+            if (method.Name.Equals("Hibernate"))
+            {
+                //wywołał metodę do hibernacji wirtualnej maszyny
+                WirtualnaMaszyna.HibernateVirtualMachine();
+                return;
+            }
+
             //if (method.IsSetter)
             //{
             //    setter(methodDef, instance, parameters);
@@ -50,7 +51,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Call
             //else
             {
                 //Wykonywanie
-                //if (CzyWykonacCzyInterpretowac(methodDef) == true)
+                if (CzyWykonacCzyInterpretowac(method) == true)
                 {
                     //wykonywanie
                     //Type type = instance?.GetType();
@@ -61,7 +62,23 @@ namespace NeuroSystem.VirtualMachine.Instructions.Call
                     //}
                    
                     //var methodInfo = type.GetMethod(methodRef);
-                    var ret = method.Invoke(instance, parameters.ToArray());
+                    var dopasowaneParametry = new List<object>();
+
+                    int i = 0;
+                    foreach (var parameter in parameters)
+                    {
+                        var methodParam = method.GetParameters()[i];
+                        if (methodParam.ParameterType == typeof(bool) && parameter is int)
+                        {
+                            dopasowaneParametry.Add(Convert.ToBoolean((int)parameter));
+                        }
+                        else
+                        {
+                            dopasowaneParametry.Add(parameter);
+                        }
+                    }
+
+                    var ret = method.Invoke(instance, dopasowaneParametry.ToArray());
                     if (method.ReturnType == typeof(void))
                     {
                         //nie zwracam wyniku
@@ -72,40 +89,40 @@ namespace NeuroSystem.VirtualMachine.Instructions.Call
                     }
                     WykonajNastepnaInstrukcje();
                 }
-                //else
-                //{
-                //    //interpretowanie
+                else
+                {
+                    //interpretowanie
 
-                //    var nazwaMetodyBazowej = methodDef.Name;
-                //    var typDef = instance.GetType().GetTypeDefinition();
-                //    var staraMetoda = WirtualnaMaszyna.AktualnaMetoda;
+                    var nazwaMetodyBazowej = method.Name;
+                    var typDef = instance.GetType().GetTypeDefinition();
+                    var staraMetoda = WirtualnaMaszyna.AktualnaMetoda;
 
-                //    var m = new Metoda();
-                //    m.NazwaTypu = methodDef.DeclaringType.FullName;
-                //    m.NazwaMetody = nazwaMetodyBazowej; //to będzie już uruchomienie na właściwym obiekcie
-                //    m.AssemblyName = methodDef.Module.FullyQualifiedName;
-                //    m.NumerWykonywanejInstrukcji = 0;
+                    var m = new Metoda();
+                    m.NazwaTypu = method.DeclaringType.FullName;
+                    m.NazwaMetody = nazwaMetodyBazowej; //to będzie już uruchomienie na właściwym obiekcie
+                    m.AssemblyName = method.Module.FullyQualifiedName;
+                    m.NumerWykonywanejInstrukcji = 0;
 
-                //    WirtualnaMaszyna.AktualnaMetoda = m;
-                //    var iloscArgumentow = methodDef.Parameters.Count;
+                    WirtualnaMaszyna.AktualnaMetoda = m;
+                    var iloscArgumentow = method.GetParameters().Count();
 
-                //    if (methodRef.HasThis)
-                //    {
-                //        PushObject(instance);
-                //        iloscArgumentow += 1;
-                //    }
+                    if (method.IsStatic == false)
+                    {
+                        PushObject(instance);
+                        iloscArgumentow += 1;
+                    }
 
-                //    foreach (var parameter in parameters)
-                //    {
-                //        PushObject(parameter);
-                //    }
+                    foreach (var parameter in parameters)
+                    {
+                        PushObject(parameter);
+                    }
 
-                //    WczytajLokalneArgumenty(iloscArgumentow);
-                    
+                    WczytajLokalneArgumenty(iloscArgumentow);
 
-                //    //zapisuję aktualną metodę na stosie
-                //    PushObject(staraMetoda);
-                //}
+
+                    //zapisuję aktualną metodę na stosie
+                    PushObject(staraMetoda);
+                }
             }
 
             
@@ -599,18 +616,13 @@ namespace NeuroSystem.VirtualMachine.Instructions.Call
         /// <param name="md"></param>
         /// <returns>true - znaczy wykonywać
         ///         false - znaczy interpretować</returns>
-        public bool CzyWykonacCzyInterpretowac(MethodReference mr)
+        public bool CzyWykonacCzyInterpretowac(MethodInfo mr)
         {
-            var md = mr.Resolve();
+            
+            var czyKlasaMaAtrybut = mr.DeclaringType.CustomAttributes.Any(a => a.AttributeType.FullName == typeof(InterpretAttribute).FullName);
+            var czyMetodaMaAtrybut = mr.CustomAttributes.Any(a => a.AttributeType.FullName == typeof(InterpretAttribute).FullName);
 
-            var czyKlasaMaAtrybut = md.DeclaringType.CustomAttributes.Any(a => a.AttributeType.FullName == typeof(InterpretAttribute).FullName);
-            var czyMetodaMaAtrybut = md.CustomAttributes.Any(a => a.AttributeType.FullName == typeof(InterpretAttribute).FullName);
-
-            if (md.IsSetter || md.IsGetter)
-            {
-                return true; //getery i setery zawssze wykonujemy
-            }
-
+            
             if (czyKlasaMaAtrybut || czyMetodaMaAtrybut)
             {
                 return false; //interpertujemy
@@ -621,8 +633,8 @@ namespace NeuroSystem.VirtualMachine.Instructions.Call
 
         public override string ToString()
         {
-            var md = instrukcja.Operand as MethodReference;
-            return base.ToString() + " " + md.Name;
+            var md = instrukcja.Operand ;
+            return base.ToString() + " " + md;
         }
     }
 }

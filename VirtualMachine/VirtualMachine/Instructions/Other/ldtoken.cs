@@ -1,4 +1,5 @@
-﻿using Mono.Reflection;
+﻿using System;
+using Mono.Reflection;
 using NeuroSystem.VirtualMachine.Core;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Other
@@ -14,6 +15,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
         
         public override void Wykonaj()
         {
+            throw new NotImplementedException("instrukcja Ldtoken");
             var td =  instrukcja.Operand as Mono.Cecil.TypeDefinition;
             if (td != null)
             {

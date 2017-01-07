@@ -1,4 +1,5 @@
-﻿using Mono.Reflection;
+﻿using System;
+using Mono.Reflection;
 
 namespace NeuroSystem.VirtualMachine.Instructions.Storage
 {
@@ -11,6 +12,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Storage
 
         public Ldarga(Instruction instrukcja) : base(instrukcja)
         {
+            throw new NotImplementedException("instrukcja Ldarga");
             index = ((Mono.Cecil.ParameterDefinition) instrukcja.Operand).Index;
             if (((Mono.Cecil.ParameterDefinition) instrukcja.Operand).Method.HasThis)
             {

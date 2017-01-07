@@ -20,7 +20,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Storage
 
         public override void Wykonaj()
         {
-            var methodDefiniton = instrukcja.Operand as Mono.Cecil.MethodDefinition;
+            var methodDefiniton = instrukcja.Operand;
             PushObject(methodDefiniton);
             WykonajNastepnaInstrukcje();
         }

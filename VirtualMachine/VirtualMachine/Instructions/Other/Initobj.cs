@@ -15,6 +15,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
 
         public override void Wykonaj()
         {
+            throw new NotImplementedException("instrukcja Initobj");
             var ob = Pop();
 
             if(ob == null)

@@ -13,6 +13,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
 
         public override void Wykonaj()
         {
+            throw new NotImplementedException("instrukcja Newarr");
             var tr = instrukcja.Operand as Mono.Cecil.TypeReference;
             var td = tr.Resolve();
 
@@ -22,10 +23,6 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
             PushObject(arr);
             WykonajNastepnaInstrukcje();
         }
-
-        public override string ToString()
-        {
-            return "Newarr ";
-        }
+        
     }
 }

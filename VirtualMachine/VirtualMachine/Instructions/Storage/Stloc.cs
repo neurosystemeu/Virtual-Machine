@@ -39,7 +39,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Storage
 
         public override string ToString()
         {
-            return base.ToString();// + " " + Indeks;
+            return base.ToString() + " " + instrukcja.OpCode.Name;
         }
     }
 }

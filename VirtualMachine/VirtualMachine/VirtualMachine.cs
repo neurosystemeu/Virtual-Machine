@@ -130,7 +130,7 @@ namespace NeuroSystem.VirtualMachine
                     RzuconyWyjatekWiadomosc = ex.Message; ;
                     if (Debugger.IsAttached)
                     {
-                        throw;
+                        Debugger.Break();
                     }
                     return;
                 }
