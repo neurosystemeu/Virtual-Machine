@@ -48,15 +48,7 @@ namespace NeuroSystem.VirtualMachine
             NumerIteracji = 0;
             Instance = instancja;
             var typ = Instance.GetType();
-            var foldre = typ.Assembly.Location;
-            var module = Mono.Cecil.ModuleDefinition.ReadModule(foldre);
-            var typy = module.GetTypes();
-            var typDef = typy.First(t => t.Name == typ.Name && t.Namespace == typ.Namespace);
-            if (typ.IsGenericType)
-            {
-                var gen = typDef.MakeGenericInstanceType(typ.GetGenericArguments()[0].GetTypeDefinition());
-                typDef = gen.Resolve();
-            }
+            
 
             var metoda = typ.GetMethod(nazwaMetodyStartu);//typDef.Methods.FirstOrDefault(mm => mm.Name == nazwaMetodyStartu);
 
@@ -240,7 +232,7 @@ namespace NeuroSystem.VirtualMachine
         }
 
 
-        private static string SerializeObject(object obj)
+        public static string SerializeObject(object obj)
         {
             if (obj == null)
             {
@@ -261,7 +253,7 @@ namespace NeuroSystem.VirtualMachine
             }
         }
 
-        private static object DeserializeObject(string xmlOfAnObject)
+        public static object DeserializeObject(string xmlOfAnObject)
         {
             if (xmlOfAnObject.StartsWith("?"))
             {

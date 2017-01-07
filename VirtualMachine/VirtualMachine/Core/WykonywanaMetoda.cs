@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Mono.Reflection;
@@ -28,6 +29,8 @@ namespace NeuroSystem.VirtualMachine.Core
             m.NazwaTypu = metoda.DeclaringType.FullName;
             m.NazwaMetody = metoda.Name;
             m.NumerWykonywanejInstrukcji = 0;
+            Xml = VirtualMachine.SerializeObject(metoda.DeclaringType);
+            
         }
 
         #region Propercje
@@ -38,6 +41,7 @@ namespace NeuroSystem.VirtualMachine.Core
         public string NazwaMetody { get; set; }
         public string AssemblyName { get; internal set; }
         public int OffsetWykonywanejInstrukcji { get; internal set; }
+        public string Xml { get; set; }
 
 
         public int NumerWykonywanejInstrukcji { get; set; }
@@ -102,6 +106,9 @@ namespace NeuroSystem.VirtualMachine.Core
             }
             else
             {
+                var obiektTyp = VirtualMachine.DeserializeObject(Xml);
+                var typ = (Type) obiektTyp;
+                return typ.GetMethod(NazwaMetody);
                 var module = Assembly.LoadFile(this.AssemblyName);
                 var typDef = module.GetTypes().First(t => t.FullName == NazwaTypu);
                 var metoda = typDef.GetMethods().FirstOrDefault(mm => mm.Name == NazwaMetody);

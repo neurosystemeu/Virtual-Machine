@@ -97,7 +97,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Call
                     var typDef = instance.GetType().GetTypeDefinition();
                     var staraMetoda = WirtualnaMaszyna.AktualnaMetoda;
 
-                    var m = new Metoda();
+                    var m = new Metoda(method);
                     m.NazwaTypu = method.DeclaringType.FullName;
                     m.NazwaMetody = nazwaMetodyBazowej; //to będzie już uruchomienie na właściwym obiekcie
                     m.AssemblyName = method.Module.FullyQualifiedName;
