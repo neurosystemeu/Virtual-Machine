@@ -80,6 +80,8 @@
     <Compile Include="Klasy\Testowe\ObiektZMetodami.cs" />
     <Compile Include="MethodInvoker\UnitTest1.cs" />
     <Compile Include="MonoCecilToReflection\MonoCecilToSystemTypeTest.cs" />
+    <Compile Include="Procesy\Arithmetic\ArithmeticProcess.cs" />
+    <Compile Include="Procesy\Arithmetic\UnitTest1.cs" />
     <Compile Include="Procesy\Fluent\DataFormFactory.cs" />
     <Compile Include="Procesy\Fluent\FluentUIProcess.cs" />
     <Compile Include="Procesy\Fluent\FluentUITest.cs" />

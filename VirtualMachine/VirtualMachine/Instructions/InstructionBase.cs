@@ -298,6 +298,10 @@ namespace NeuroSystem.VirtualMachine.Instructions
                         return new Ldftn(instrukcja);
                     case "stsfld":
                         return new Stsfld(instrukcja);
+                    case "mul":
+                        return new Mul(instrukcja);
+                    case "div":
+                        return new Div(instrukcja);
                 }
 
                 throw new Exception("Brak instrukcji " + instrukcja.OpCode.Name + " " + instrukcja.ToString());
