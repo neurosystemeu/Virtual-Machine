@@ -7,7 +7,7 @@ using NeuroSystem.VirtualMachine.Core.Attributes;
 
 namespace NeuroSystem.UnitTestVirtualMachine.Example
 {
-    public class HibernateWorkflowSimple
+    public class HibernateWorkflow
     {
         public int InputParametr { get; set; }
         public string Start()
@@ -18,10 +18,7 @@ namespace NeuroSystem.UnitTestVirtualMachine.Example
                 SomeInterpretedFunction();
             }
 
-            //hibernate executed method
-            VirtualMachine.VirtualMachine.Hibernate();
-
-            //after resume
+            //after restore (in another thread/computer)
             //do some work
             for (int i = 0; i < 10; i++)
             {
