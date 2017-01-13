@@ -60,3 +60,69 @@ Assert.AreEqual(retInProcProces, retFromSerializedVM);
 ```
 [Full test](https://github.com/neurosystemeu/Virtual-Machine/blob/master/VirtualMachine/UnitTestVirtualMachine/Example/UnitTestExample.cs)
 
+### the process with interpreted functions (subfunctions)
+```C#
+public class HibernateWorkflow
+{
+    public int InputParametr { get; set; }
+    public string Start()
+    {
+        //do some work
+        for (int i = 0; i < 10; i++)
+        {
+            SomeInterpretedFunction();
+        }
+
+        //after restore (in another thread/computer)
+        //do some work
+        for (int i = 0; i < 10; i++)
+        {
+            SomeInterpretedFunction();
+        }
+
+        return "Helow World " + InputParametr;
+    }
+
+    [Interpret]
+    public void SomeInterpretedFunction()
+    {
+        //do some work
+        InputParametr++;
+
+        //hibernate executed method
+        VirtualMachine.VirtualMachine.Hibernate();
+    }
+
+
+}
+```
+[full code](https://github.com/neurosystemeu/Virtual-Machine/blob/master/VirtualMachine/UnitTestVirtualMachine/Example/HibernateWorkflow.cs)
+
+launching
+```C#
+ var proces = new HibernateWorkflowSimple() { InputParametr = 10 };
+var vm = new VirtualMachine.VirtualMachine();
+vm.Start(proces);
+var serializedVMXml = vm.Serialize();
+object retFromSerializedVM = "";
+
+while (vm.Status == VirtualMachineState.Hibernated)
+{
+    vm = VirtualMachine.VirtualMachine.Deserialize(serializedVMXml);
+    retFromSerializedVM = vm.Resume();
+    serializedVMXml = vm.Serialize();
+}
+
+var inProcProces = new HibernateWorkflowSimple() { InputParametr = 10 };
+var retInProcProces = inProcProces.Start();
+Assert.AreEqual(retInProcProces, retFromSerializedVM);
+```
+
+## Dependencies
+[Mono.Cecil](https://github.com/jbevain/cecil) - will be removed
+[Mono.Reflection](https://github.com/jbevain/mono.reflection)
+[sharpSerializer](http://sharpserializer.com/en/index.html)
+
+## Used in
+[Native-Workflow](https://github.com/neurosystemeu/Native-Workflow) - workflow engine for long run process/workflow. Allow to serialize executed workflow and resume. It has a fluent GUI through a process can communicate with the user. (WWW and Console GUI)
+
