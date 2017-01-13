@@ -140,13 +140,19 @@ namespace NeuroSystem.VirtualMachine
             }
         }
 
-        public void Resume()
+        public object Resume()
         {
             Status = VirtualMachineState.Executed;
             CzyWykonywacInstrukcje = true;
             AktualnaMetoda.NumerWykonywanejInstrukcji++;
 
             Execute();
+            if(Status == VirtualMachineState.Executed)
+            {
+                return Wynik;
+            }
+
+            return null;
         }
 
         public void HibernateVirtualMachine()

@@ -68,6 +68,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Example\HibernateWorkflowSimple.cs" />
+    <Compile Include="Example\UnitTestExample.cs" />
     <Compile Include="Generyki\MonoCecilTest\UnitTest1.cs" />
     <Compile Include="Klasy\Biznesowe\ObiektBiznesowy.cs" />
     <Compile Include="Klasy\Biznesowe\Person.cs" />
