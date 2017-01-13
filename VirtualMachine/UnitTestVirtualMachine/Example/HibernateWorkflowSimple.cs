@@ -31,16 +31,10 @@ namespace NeuroSystem.UnitTestVirtualMachine.Example
             return "Helow World " + InputParametr;
         }
 
-        [Interpret]
         public void SomeInterpretedFunction()
         {
             //do some work
             InputParametr++;
-
-            //hibernate executed method
-            VirtualMachine.VirtualMachine.Hibernate();
         }
-
-
     }
 }
