@@ -93,8 +93,6 @@ public class HibernateWorkflow
         //hibernate executed method
         VirtualMachine.VirtualMachine.Hibernate();
     }
-
-
 }
 ```
 [full code](https://github.com/neurosystemeu/Virtual-Machine/blob/master/VirtualMachine/UnitTestVirtualMachine/Example/HibernateWorkflow.cs)
@@ -121,7 +119,9 @@ Assert.AreEqual(retInProcProces, retFromSerializedVM);
 
 ## Dependencies
 [Mono.Cecil](https://github.com/jbevain/cecil) - will be removed
+
 [Mono.Reflection](https://github.com/jbevain/mono.reflection)
+
 [sharpSerializer](http://sharpserializer.com/en/index.html)
 
 ## Used in
