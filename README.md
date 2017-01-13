@@ -1,4 +1,5 @@
 # Virtual-Machine
+Version during the translation - I'm sorry for the mistakes
 
 Virtual machine written in C #. It allows you to perform / emulate the compiled .net code (IL). The code is executed instruction by instruction. (Virtual machine emulates all instructions from IL)
 Execute code can be hibernated and then restarted (even on another machine after serialization)
