@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\ElementBase.cs" />
+    <Compile Include="Core\Serialization\NsTypedParameterExpression.cs" />
     <Compile Include="Core\Variables\Addresses\ArgumentAddress.cs" />
     <Compile Include="Core\Variables\Addresses\LocalVariableAddress.cs" />
     <Compile Include="Core\Components\MethodData.cs" />

@@ -171,6 +171,21 @@ namespace NeuroSystem.VirtualMachine
 
         }
 
+        /// <summary>
+        /// Metoda służy do kończenia wykonywania wirtualnej maszyny
+        /// Wywoływana z procesu który interpretowany jest przez wirtualną maszynę
+        /// </summary>
+        public static void EndProcess()
+        {
+
+        }
+
+        public void EndProcessVirtualMachine()
+        {
+            CzyWykonywacInstrukcje = false;
+            Status = VirtualMachineState.Executed;
+        }
+
         public InstructionBase PobierzAktualnaInstrukcje()
         {
             var ai = AktualnaMetoda.Instrukcje[AktualnaMetoda.NumerWykonywanejInstrukcji];

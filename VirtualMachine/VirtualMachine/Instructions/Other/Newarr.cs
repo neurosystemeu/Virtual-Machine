@@ -13,11 +13,11 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
 
         public override void Wykonaj()
         {
-            throw new NotImplementedException("instrukcja Newarr");
-            var tr = instrukcja.Operand as Mono.Cecil.TypeReference;
-            var td = tr.Resolve();
+            //throw new NotImplementedException("instrukcja Newarr");
+            var tr = instrukcja.Operand as Type;
+            //var td = tr;
 
-            var typ = td.GetSystemType();
+            var typ = tr;
             var n = (int)PopObject();
             object arr = Array.CreateInstance(typ, n);
             PushObject(arr);

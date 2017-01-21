@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Mono.Reflection;
 using NeuroSystem.VirtualMachine.Core;
 
@@ -15,26 +16,31 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
         
         public override void Wykonaj()
         {
-            throw new NotImplementedException("instrukcja Ldtoken");
-            var td =  instrukcja.Operand as Mono.Cecil.TypeDefinition;
+            //throw new NotImplementedException("instrukcja Ldtoken");
+            var td = instrukcja.Operand as Type;
             if (td != null)
             {
-                var typ = td.GetSystemType();
+                var typ = td;
                 var h = typ.TypeHandle;
                 PushObject(h);
                 WykonajNastepnaInstrukcje();
+                return;
             }
-            var md = instrukcja.Operand as Mono.Cecil.MethodDefinition;
+            
+            var md = instrukcja.Operand as MethodInfo;
             if (md != null)
             {
-                var typ = md.DeclaringType.GetSystemType();
-                var typZwracany = md.ReturnType.GetSystemType();
-                var metoda = typ.GetMethod(md.Name);
-                var h = metoda.MethodHandle;
+                //var typ = md.DeclaringType;
+                //var typZwracany = md.ReturnType;
+                //var metoda = typ.GetMethod(md.Name);
+                var h = md.MethodHandle;
                 
                 PushObject(h);
                 WykonajNastepnaInstrukcje();
+                return;
             }
+
+            throw new NotImplementedException("instrukcja Ldtoken");
         }
 
         public override string ToString()

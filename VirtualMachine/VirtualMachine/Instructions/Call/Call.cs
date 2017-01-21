@@ -33,10 +33,17 @@ namespace NeuroSystem.VirtualMachine.Instructions.Call
 
             parameters.Reverse();
 
-            if (method.Name.Equals("Hibernate"))
+            if (method.Name.Equals("Hibernate") && method.DeclaringType == typeof(VirtualMachine))
             {
                 //wywołał metodę do hibernacji wirtualnej maszyny
                 WirtualnaMaszyna.HibernateVirtualMachine();
+                return;
+            }
+
+            if (method.Name.Equals("EndProcess") && method.DeclaringType == typeof(VirtualMachine))
+            {
+                //wywołał metodę do hibernacji wirtualnej maszyny
+                WirtualnaMaszyna.EndProcessVirtualMachine();
                 return;
             }
 
