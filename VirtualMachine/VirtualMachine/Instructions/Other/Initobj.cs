@@ -15,7 +15,7 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
 
         public override void Wykonaj()
         {
-            throw new NotImplementedException("instrukcja Initobj");
+            //throw new NotImplementedException("instrukcja Initobj");
             var ob = Pop();
 
             if(ob == null)
@@ -30,8 +30,10 @@ namespace NeuroSystem.VirtualMachine.Instructions.Other
                 if(zmienna != null)
                 {
                     //TODO: coś trzeba zrobić , pewnie zerować wszystkie propercje
-                    var insturkcjaGeneryczna = this.instrukcja.Operand as Mono.Cecil.GenericInstanceType;
-                    if (insturkcjaGeneryczna != null && insturkcjaGeneryczna.FullName.StartsWith("System.Nullable"))
+                    var typInstancji = this.instrukcja.Operand as Type;
+                    //if (insturkcjaGeneryczna != null && insturkcjaGeneryczna.FullName.StartsWith("System.Nullable"))
+                    //Wcześniej tylko nullable ustawialiśmy na null - teraz wszystko co można nulujemy
+                    if(typInstancji.IsValueType == false)
                     {
                         adres.SetNull();
                     }
