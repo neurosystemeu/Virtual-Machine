@@ -78,7 +78,7 @@ namespace NeuroSystem.VirtualMachine
         }
         #endregion
 
-        
+
         public TD Start<T, TD>(T instancja, Expression<Func<T, TD>> startMethod, bool czyWykonywac = true)
         {
             WalidujMetodyObiektu(instancja);
