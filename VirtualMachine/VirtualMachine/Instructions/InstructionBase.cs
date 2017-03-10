@@ -302,6 +302,8 @@ namespace NeuroSystem.VirtualMachine.Instructions
                         return new Mul(instrukcja);
                     case "div":
                         return new Div(instrukcja);
+                    case "beq.s":
+                        return new Beq(instrukcja);
                 }
 
                 throw new Exception("Brak instrukcji " + instrukcja.OpCode.Name + " " + instrukcja.ToString());
